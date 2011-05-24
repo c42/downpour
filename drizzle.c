@@ -15,6 +15,14 @@ static VALUE do_not_use_this_constructor(VALUE self)
   rb_raise(rb_eNameError, "private method `new' called for %s:Class.", rb_class2name(CLASS_OF(self)));
 }
 
+VALUE drizzle_gem_to_string_array(char **array)
+{
+  VALUE ary = rb_ary_new();
+  rb_ary_push(ary, rb_str_new2(array[0]));
+
+  return ary;
+}
+
 VALUE drizzle_gem_create_class_with_private_constructor(const char *name, VALUE super)
 {
   VALUE ret = rb_define_class_under(DrizzleModule, name, super);
