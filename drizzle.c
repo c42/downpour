@@ -22,6 +22,12 @@ VALUE drizzle_gem_create_class_with_private_constructor(const char *name, VALUE 
   return ret;
 }
 
+void drizzle_gem_assert_value_is_ok(drizzle_return_t ret)
+{
+  if(ret != DRIZZLE_RETURN_OK)
+    rb_raise(rb_eIOError, "Action Failed with error code: %d", ret);
+}
+
 void Init_drizzle()
 {
   init_drizzle_module();
