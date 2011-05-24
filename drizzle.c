@@ -17,14 +17,23 @@ static VALUE initialize(VALUE self)
 
 static VALUE create(VALUE self)
 {
-  void *ptr = drizzle_create(NULL);
+  drizzle_st *ptr = drizzle_create(NULL);
   return Data_Wrap_Struct(Drizzle, NULL, drizzle_free, ptr);
+}
+
+static VALUE clone(VALUE self)
+{
+  drizzle_st *ptr;
+  Data_Get_Struct(self, drizzle_st, ptr);
+  drizzle_st *cloned = drizzle_clone(NULL, ptr);
+  return Data_Wrap_Struct(Drizzle, NULL, drizzle_free, cloned);
 }
 
 void Init_drizzle()
 {
   Drizzle = rb_define_class("Drizzle", rb_cObject);
-  rb_define_singleton_method(Drizzle, "version", version, 0);
   rb_define_method(Drizzle, "initialize", initialize, 0);
+  rb_define_singleton_method(Drizzle, "version", version, 0);
   rb_define_singleton_method(Drizzle, "create", create, 0);
+  rb_define_method(Drizzle, "clone", clone, 0);
 }
