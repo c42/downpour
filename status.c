@@ -14,7 +14,7 @@ static VALUE add_tcp_connection(VALUE self)
   read_self_ptr();
 
   //TODO: Set real values here
-  drizzle_con_st *connection = drizzle_con_add_tcp(self_ptr, NULL, "localhost", DRIZZLE_DEFAULT_TCP_PORT, "", "", "test", DRIZZLE_CON_NONE);
+  drizzle_con_st *connection = drizzle_con_add_tcp(self_ptr, NULL, "localhost", DRIZZLE_DEFAULT_TCP_PORT, "gja", "", "test", DRIZZLE_CON_NONE);
 
   VALUE val = Data_Wrap_Struct(DrizzleConnection, NULL, NULL, connection);
   rb_iv_set(val, "@status", self);
