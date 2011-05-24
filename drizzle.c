@@ -15,10 +15,13 @@ static VALUE do_not_use_this_constructor(VALUE self)
   rb_raise(rb_eNameError, "private method `new' called for %s:Class.", rb_class2name(CLASS_OF(self)));
 }
 
-VALUE drizzle_gem_to_string_array(char **array)
+VALUE drizzle_gem_to_string_array(char **array, long count)
 {
-  VALUE ary = rb_ary_new();
-  rb_ary_push(ary, rb_str_new2(array[0]));
+  VALUE ary = rb_ary_new2(count);
+
+  long i;
+  for(i = 0; i < count; i++)
+    rb_ary_push(ary, rb_str_new2(array[i]));
 
   return ary;
 }
