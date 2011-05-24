@@ -10,6 +10,8 @@ static VALUE query(VALUE self, VALUE query)
   drizzle_return_t retptr;
   drizzle_result_st *result = drizzle_query_str(self_ptr, NULL, "select * from items", &retptr);
 
+  CHECK_OK(retptr);
+
   return Data_Wrap_Struct(DrizzleResult, NULL, NULL, result);
 }
 
