@@ -53,6 +53,9 @@ describe Drizzle do
 
       it_should_behave_like "a read query"
     end
+  end
 
+  after(:each) do
+    #puts @status.error
   end
 end

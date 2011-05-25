@@ -1,3 +1,9 @@
 = Downpour 0.0.1
 
 Downpour is a gem to connect and query a Drizzle or MySql database using the libdrizzle library.
+
+== Test setup
+Run the following:
+$ echo "create database test;" | drizzle
+$ drizzle test < spec/bootstrap.sql
+$ rake
