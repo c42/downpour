@@ -10,12 +10,13 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
-  s.files = `git ls-files lib`.split("\n") + ["lib/downpour/downpour.bundle"]
+  s.files = `git ls-files ext lib downpour.gemspec`.split("\n")
   s.homepage = %q{http://github.com/gja/downpour}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib", "ext"]
   s.rubygems_version = %q{1.4.2}
   s.summary = %q{A simple, fast Mysql and Drizzle library for Ruby, binding to libdrizzle}
+  s.description = %q{A simple, fast Mysql and Drizzle library for Ruby, binding to libdrizzle. Still in early alpha}
   s.test_files = `git ls-files spec examples`.split("\n")
 
   # tests
