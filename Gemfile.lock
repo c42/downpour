@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    downpour (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    rake (0.9.0)
+    rake-compiler (0.7.8)
+      rake
+    rspec (2.6.0)
+      rspec-core (~> 2.6.0)
+      rspec-expectations (~> 2.6.0)
+      rspec-mocks (~> 2.6.0)
+    rspec-core (2.6.3)
+    rspec-expectations (2.6.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  downpour!
+  rake-compiler (~> 0.7.1)
+  rspec
