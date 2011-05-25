@@ -10,7 +10,7 @@ void init_drizzle_status();
 void init_drizzle_connection();
 void init_drizzle_result();
 
-void Init_drizzle()
+void Init_downpour()
 {
   init_drizzle_module();
   init_drizzle_status();

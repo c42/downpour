@@ -1,6 +1,6 @@
 require 'mkmf'
 
-extension_name = 'drizzle'
+extension_name = 'downpour'
 dir_config(extension_name)
 
 have_library("drizzle")
