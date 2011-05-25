@@ -8,7 +8,7 @@ static VALUE query(VALUE self, VALUE query)
   //TODO: Throw an exception if it's not a string
   
   drizzle_return_t retptr;
-  drizzle_result_st *result = drizzle_query_str(self_ptr, NULL, "select * from items", &retptr);
+  drizzle_result_st *result = drizzle_query_str(self_ptr, NULL, "select * from Test1", &retptr);
 
   CHECK_OK(retptr);
 
