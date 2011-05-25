@@ -9,3 +9,4 @@ var
 *.so
 .DS_Store
 Gemfile.lock
+downpour-*.gem

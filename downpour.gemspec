@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
-  s.files = `git ls-files`.split("\n")
+  s.files = `git ls-files lib`.split("\n") + ["lib/downpour/downpour.bundle"]
   s.homepage = %q{http://github.com/gja/downpour}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib", "ext"]
