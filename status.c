@@ -2,7 +2,7 @@
 
 #define SELF_TYPE drizzle_st
 
-static VALUE clone(VALUE self)
+static VALUE clone_status(VALUE self)
 {
   read_self_ptr();
   drizzle_st *cloned = drizzle_clone(NULL, self_ptr);
@@ -34,12 +34,14 @@ static VALUE set_verbose(VALUE self, VALUE newVerbocity)
 
   int verbocity = NUM2INT(newVerbocity);
   drizzle_set_verbose(self_ptr, verbocity);
+
+  return newVerbocity;
 }
 
 void init_drizzle_status()
 {
   DrizzleStatus = drizzle_gem_create_class_with_private_constructor("Status", rb_cObject);
-  rb_define_method(DrizzleStatus, "clone", clone, 0);
+  rb_define_method(DrizzleStatus, "clone", clone_status, 0);
   rb_define_method(DrizzleStatus, "add_tcp_connection", add_tcp_connection, 0);
   rb_define_method(DrizzleStatus, "error", error, 0);
   rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);

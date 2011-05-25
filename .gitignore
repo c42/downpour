@@ -4,3 +4,5 @@ Makefile
 *.bundle
 mkmf.log
 var
+*.out
+*.so
