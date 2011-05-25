@@ -28,3 +28,12 @@ void drizzle_gem_assert_value_is_ok(drizzle_return_t ret)
   if(ret != DRIZZLE_RETURN_OK)
     rb_raise(rb_eIOError, "Action Failed with error code: %d. Please check the error string on status object for more information", ret);
 }
+
+const char *drizzle_gem_read_string_with_default(VALUE string, const char *default_value)
+{
+  if(string == Qnil)
+    return default_value;
+
+  Check_Type(string, T_STRING);
+  return RSTRING_PTR(string);
+}

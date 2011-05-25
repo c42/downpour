@@ -57,12 +57,4 @@ describe Drizzle do
     end
 
   end
-
-  after(:each) do
-    error = @status.error
-    if(error != "")
-      puts error
-    end
-  end
-
 end
