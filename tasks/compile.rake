@@ -11,3 +11,8 @@ Rake::ExtensionTask.new("downpour", gemspec) do |ext|
   CLEAN.include "#{ext.lib_dir}/*.#{RbConfig::CONFIG['DLEXT']}"
 end
 Rake::Task[:spec].prerequisites << :compile
+
+desc "Build a gem file for downpour"
+task :build do
+    system "gem build downpour.gemspec"
+end
