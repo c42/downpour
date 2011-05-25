@@ -6,3 +6,5 @@ mkmf.log
 var
 *.out
 *.so
+.DS_Store
+Gemfile.lock
