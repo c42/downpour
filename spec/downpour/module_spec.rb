@@ -1,5 +1,5 @@
 describe Downpour do
   it "should have the version number set" do
-    Downpour::VERSION.should eq("0.0.1")
+    Downpour.drizzle_version.should eq("7")
   end
 end

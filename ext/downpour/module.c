@@ -14,6 +14,6 @@ static VALUE create(VALUE self)
 void init_downpour_module()
 {
   DownpourModule = rb_define_module("Downpour");
-  rb_define_singleton_method(DownpourModule, "version", version, 0);
+  rb_define_singleton_method(DownpourModule, "drizzle_version", version, 0);
   rb_define_singleton_method(DownpourModule, "create", create, 0);
 }
