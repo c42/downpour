@@ -1,4 +1,4 @@
-require 'spec_helper'
+require './spec_helper'
 
 describe Drizzle do
   before(:each) do

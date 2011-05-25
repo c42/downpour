@@ -1,4 +1,4 @@
-require 'spec_helper'
+require './spec_helper'
 
 describe Drizzle do
   it "should have the version number set" do
