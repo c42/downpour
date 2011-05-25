@@ -17,5 +17,6 @@ VALUE drizzle_gem_to_string_array(char **array, long count);
 #define convert_to_struct(datatype, var_name, value) datatype *var_name; Data_Get_Struct(value, datatype, var_name)
 #define read_self_ptr() convert_to_struct(SELF_TYPE, self_ptr, self)
 #define CHECK_OK(value) drizzle_gem_assert_value_is_ok(value)
+#define rb_call(self, string) rb_funcall(self, rb_intern(string), 0)
 
 #endif
