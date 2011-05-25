@@ -1,6 +1,7 @@
 *.o
 tags
 Makefile
+tmp
 *.bundle
 mkmf.log
 var
