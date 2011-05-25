@@ -5,10 +5,11 @@
 static VALUE query(VALUE self, VALUE query)
 {
   read_self_ptr();
-  //TODO: Throw an exception if it's not a string
+
+  Check_Type(query, T_STRING);
   
   drizzle_return_t retptr;
-  drizzle_result_st *result = drizzle_query_str(self_ptr, NULL, "select * from Test1", &retptr);
+  drizzle_result_st *result = drizzle_query(self_ptr, NULL, RSTRING_PTR(query), RSTRING_LEN(query), &retptr);
 
   CHECK_OK(retptr);
 
