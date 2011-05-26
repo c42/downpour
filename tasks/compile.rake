@@ -1,18 +1,20 @@
-require "rake/extensiontask"
-
 def gemspec
   @clean_gemspec ||= eval(File.read(File.expand_path('../../downpour.gemspec', __FILE__)))
 end
 
-Rake::ExtensionTask.new("downpour", gemspec) do |ext|
-  ext.lib_dir = File.join 'lib', 'downpour'
+begin
+  require "rake/extensiontask"
+  Rake::ExtensionTask.new("downpour", gemspec) do |ext|
+    ext.lib_dir = File.join 'lib', 'downpour'
 
-  # clean compiled extension
-  CLEAN.include "#{ext.lib_dir}/*.#{RbConfig::CONFIG['DLEXT']}"
-end
-Rake::Task[:spec].prerequisites << :compile
+    CLEAN.include "#{ext.lib_dir}/*.#{RbConfig::CONFIG['DLEXT']}"
+  end
+  Rake::Task[:spec].prerequisites << :compile
 
-desc "Build a gem file for downpour"
-task :build do
-    system "gem build downpour.gemspec"
+  Rake::GemPackageTask.new(gemspec) do |pkg|
+    pkg.need_zip = true
+    pkg.need_tar = true
+  end
+rescue LoadError
+  puts "rake-compiler, or one of its dependencies, is not available. Install it with: sudo gem install rake-compirer"
 end
