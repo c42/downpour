@@ -7,8 +7,8 @@ static VALUE version(VALUE self)
 
 static VALUE create(VALUE self)
 {
-  drizzle_st *ptr = drizzle_create(NULL);
-  return Data_Wrap_Struct(DrizzleStatus, NULL, drizzle_free, ptr);
+  drizzle_st *ptr = drizzle_create(drizzle_alloc(drizzle_st));
+  return downpour_constructor(ptr);
 }
 
 void init_drizzle_module()

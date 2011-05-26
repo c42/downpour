@@ -48,13 +48,13 @@ static VALUE wrap_row(drizzle_result_st *self_ptr, drizzle_row_t row)
   if(row == NULL)
     return Qnil;
 
-  // TODO: wrap this in a Ruby Object. It should be freed
   return drizzle_gem_to_string_array(row, do_column_count(self_ptr));
 }
 
 static VALUE next_row_buffered(drizzle_result_st *self_ptr)
 {
-  return wrap_row(self_ptr, drizzle_row_next(self_ptr));
+  drizzle_row_t result = drizzle_row_next(self_ptr);
+  return wrap_row(self_ptr, result);
 }
 
 static VALUE next_row_unbuffered(drizzle_result_st *self_ptr)
@@ -62,7 +62,9 @@ static VALUE next_row_unbuffered(drizzle_result_st *self_ptr)
   drizzle_return_t ret;
   drizzle_row_t result = drizzle_row_buffer(self_ptr, &ret);
   CHECK_OK(ret);
-  return wrap_row(self_ptr, result);
+  VALUE parsed = wrap_row(self_ptr, result);
+  drizzle_row_free(self_ptr, result);
+  return parsed;
 }
 
 static VALUE next_row(VALUE self)
@@ -79,6 +81,17 @@ static VALUE column_count(VALUE self)
 {
   read_self_ptr();
   return UINT2NUM(do_column_count(self_ptr));
+}
+
+static void downpour_result_destructor(drizzle_result_st *self_ptr)
+{
+  drizzle_result_free(self_ptr);
+  free(self_ptr);
+}
+
+VALUE downpour_result_constructor(drizzle_result_st *self_ptr)
+{
+  return Data_Wrap_Struct(DrizzleResult, NULL, NULL, self_ptr);
 }
 
 void init_drizzle_result()
