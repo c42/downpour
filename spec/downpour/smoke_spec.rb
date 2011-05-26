@@ -45,7 +45,7 @@ describe Downpour do
     end
 
     context "without buffering" do
-      it_should_behave_like "a read query"
+      #it_should_behave_like "a read query"
     end
 
     context "with buffering" do
