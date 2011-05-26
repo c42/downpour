@@ -1,4 +1,4 @@
-#include "drizzle.h"
+#include "downpour.h"
 
 static VALUE do_not_use_this_constructor(VALUE self)
 {
@@ -18,7 +18,7 @@ VALUE drizzle_gem_to_string_array(char **array, long count)
 
 VALUE drizzle_gem_create_class_with_private_constructor(const char *name, VALUE super)
 {
-  VALUE ret = rb_define_class_under(DrizzleModule, name, super);
+  VALUE ret = rb_define_class_under(DownpourModule, name, super);
   rb_define_method(ret, "initialize", do_not_use_this_constructor, 0);
   return ret;
 }

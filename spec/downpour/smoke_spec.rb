@@ -1,7 +1,7 @@
-describe Drizzle do
+describe Downpour do
 
   before(:each) do
-    @status = Drizzle.create
+    @status = Downpour.create
     @conn = create_connection(@status)
   end
 

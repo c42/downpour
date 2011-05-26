@@ -5,7 +5,7 @@
 #include <libdrizzle/drizzle.h>
 #include <libdrizzle/drizzle_client.h>
 
-extern VALUE DrizzleModule;
+extern VALUE DownpourModule;
 extern VALUE DrizzleStatus;
 extern VALUE DrizzleConnection;
 extern VALUE DrizzleResult;
