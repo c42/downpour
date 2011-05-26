@@ -46,6 +46,20 @@ static VALUE set_verbose(VALUE self, VALUE newVerbocity)
   return newVerbocity;
 }
 
+static VALUE get_verbose(VALUE self)
+{
+  read_self_ptr();
+
+  return UINT2NUM(drizzle_verbose(self_ptr));
+}
+
+static VALUE verbose_name(VALUE self)
+{
+  read_self_ptr();
+
+  return rb_str_new2(drizzle_verbose_name(drizzle_verbose(self_ptr)));
+}
+
 static void downpour_destructor(drizzle_st *self_ptr)
 {
   drizzle_free(self_ptr);
@@ -63,4 +77,6 @@ void init_drizzle_status()
   rb_define_method(DrizzleStatus, "add_tcp_connection", add_tcp_connection, -1);
   rb_define_method(DrizzleStatus, "error", error, 0);
   rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);
+  rb_define_method(DrizzleStatus, "verbose", get_verbose, 0);
+  rb_define_method(DrizzleStatus, "verbose_name", verbose_name, 0);
 }
