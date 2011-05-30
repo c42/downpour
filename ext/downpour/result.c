@@ -77,7 +77,8 @@ static VALUE next_row_unbuffered(drizzle_result_st *self_ptr)
   buffer_column_if_needed(self_ptr);
   drizzle_row_t result = do_drizzle_row_buffer(self_ptr);
   VALUE parsed = wrap_row(self_ptr, result);
-  drizzle_row_free(self_ptr, result);
+  if(result)
+    drizzle_row_free(self_ptr, result);
   return parsed;
 }
 
