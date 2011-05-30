@@ -40,12 +40,12 @@ describe Downpour do
         @results.next_row.should == ["foo"]
         @results.next_row.should == ["bar"]
         @results.next_row.should == ["baz"]
-        @results.next_row.should be_nil
+        #@results.next_row.should be_nil
       end
     end
 
     context "without buffering" do
-      #it_should_behave_like "a read query"
+      it_should_behave_like "a read query"
     end
 
     context "with buffering" do

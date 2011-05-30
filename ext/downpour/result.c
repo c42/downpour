@@ -57,11 +57,25 @@ static VALUE next_row_buffered(drizzle_result_st *self_ptr)
   return wrap_row(self_ptr, result);
 }
 
-static VALUE next_row_unbuffered(drizzle_result_st *self_ptr)
+static void buffer_column_if_needed(drizzle_result_st *self_ptr)
+{
+  if(self_ptr->options & DRIZZLE_RESULT_BUFFER_COLUMN)
+    return;
+  CHECK_OK(drizzle_column_buffer(self_ptr));
+}
+
+static drizzle_row_t do_drizzle_row_buffer(drizzle_result_st *self_ptr)
 {
   drizzle_return_t ret;
   drizzle_row_t result = drizzle_row_buffer(self_ptr, &ret);
   CHECK_OK(ret);
+  return result;
+}
+
+static VALUE next_row_unbuffered(drizzle_result_st *self_ptr)
+{
+  buffer_column_if_needed(self_ptr);
+  drizzle_row_t result = do_drizzle_row_buffer(self_ptr);
   VALUE parsed = wrap_row(self_ptr, result);
   drizzle_row_free(self_ptr, result);
   return parsed;
