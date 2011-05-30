@@ -83,15 +83,9 @@ static VALUE column_count(VALUE self)
   return UINT2NUM(do_column_count(self_ptr));
 }
 
-static void downpour_result_destructor(drizzle_result_st *self_ptr)
-{
-  drizzle_result_free(self_ptr);
-  free(self_ptr);
-}
-
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr)
 {
-  return Data_Wrap_Struct(DrizzleResult, NULL, NULL, self_ptr);
+  return Data_Wrap_Struct(DrizzleResult, NULL, drizzle_result_free, self_ptr);
 }
 
 void init_drizzle_result()

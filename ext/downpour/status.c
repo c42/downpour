@@ -19,7 +19,7 @@ static VALUE add_tcp_connection(int argc, VALUE *argv, VALUE self)
   //TODO: We ignore options
   rb_scan_args(argc, argv, "06", &host, &user, &passwd, &db, &port, &options);
 
-  drizzle_con_st *connection = drizzle_con_add_tcp(self_ptr, drizzle_alloc(drizzle_con_st), 
+  drizzle_con_st *connection = drizzle_con_add_tcp(self_ptr, NULL, 
                                                     read_string(host, "localhost"), 
                                                     get_port(port),
                                                     read_string(user, ""),
@@ -60,15 +60,9 @@ static VALUE verbose_name(VALUE self)
   return rb_str_new2(drizzle_verbose_name(drizzle_verbose(self_ptr)));
 }
 
-static void downpour_destructor(drizzle_st *self_ptr)
-{
-  drizzle_free(self_ptr);
-  free(self_ptr);
-}
-
 VALUE downpour_constructor(drizzle_st *self_ptr)
 {
-  return Data_Wrap_Struct(DrizzleStatus, NULL, downpour_destructor, self_ptr);
+  return Data_Wrap_Struct(DrizzleStatus, NULL, drizzle_free, self_ptr);
 }
 
 void init_drizzle_status()
