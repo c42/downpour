@@ -26,7 +26,7 @@ static VALUE add_tcp_connection(int argc, VALUE *argv, VALUE self)
                                                     read_string(passwd, ""),
                                                     read_string(db, "test"),
                                                     DRIZZLE_CON_NONE);
-  return downpour_connection_constructor(connection);
+  return downpour_connection_constructor(connection, self);
 }
 
 static VALUE error(VALUE self)
