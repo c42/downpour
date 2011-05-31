@@ -30,5 +30,10 @@ describe Downpour do
       @connection.user.should == ENV["USER"]
       @connection.password.should == ""
     end
+
+    it "should close the connection" do
+      @connection.close!
+      # TODO: Find a way to assert on this
+    end
   end
 end
