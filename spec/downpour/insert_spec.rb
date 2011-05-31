@@ -1,4 +1,4 @@
-describe "insert query" do
+describe "an insert query" do
 
   def count_of_test2
     @conn.query("select * from Test2").row_count

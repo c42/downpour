@@ -1,4 +1,4 @@
-describe "select query" do
+describe "a select query" do
 
   before(:each) do
     @status = Downpour.create
@@ -22,15 +22,6 @@ describe "select query" do
     @results.buffer!.should be_false
   end
 
-  it "should count columns" do
-    @results.column_count.should == 1
-  end
-
-  it "should not buffer when reading a single row" do
-    @results.next_row
-    @results.should_not be_buffered
-  end
-
   shared_examples_for "a read query" do
     it "should read all rows" do
       @results.next_row.should == ["foo"]
@@ -38,10 +29,16 @@ describe "select query" do
       @results.next_row.should == ["baz"]
       @results.next_row.should be_nil
     end
+
+    it "should count columns" do
+      @results.column_count.should == 1
+    end
   end
 
   context "without buffering" do
     it_should_behave_like "a read query"
+
+    after(:each) {@results.should_not be_buffered}
   end
 
   context "with buffering" do
