@@ -26,6 +26,5 @@ const char *drizzle_gem_read_string_with_default(VALUE string, const char *defau
 #define rb_call(self, string) rb_funcall(self, rb_intern(string), 0)
 #define read_string(value, default_value) drizzle_gem_read_string_with_default(value, default_value)
 #define drizzle_alloc(type) ((type *) malloc(sizeof(type)))
-#define unset_option(value, bit) if(value->options & bit) value->options ^= bit
 
 #endif
