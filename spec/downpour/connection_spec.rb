@@ -16,12 +16,7 @@ describe Downpour do
     end
 
     it "should only accept a string as query" do
-      begin
-        @connection.query 42
-        raise "should have failed here"
-      rescue TypeError
-      end
+      lambda {@connection.query 42}.should raise_error(TypeError)
     end
-
   end
 end
