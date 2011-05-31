@@ -18,7 +18,9 @@ describe Downpour do
     it "should only accept a string as query" do
       lambda {@connection.query 42}.should raise_error(TypeError)
     end
-
+  end
+  
+  context "simple attributes" do
     it "should change the database" do
       @connection.db.should == "test"
       @connection.db = "blah"
@@ -30,10 +32,10 @@ describe Downpour do
       @connection.user.should == ENV["USER"]
       @connection.password.should == ""
     end
+  end
 
-    it "should close the connection" do
-      @connection.close!
-      # TODO: Find a way to assert on this
-    end
+  it "should close the connection" do
+    @connection.close!
+    # TODO: Find a way to assert on this
   end
 end
