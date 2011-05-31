@@ -6,7 +6,7 @@ describe Downpour do
 
   context "error handling" do
 
-    it "should be able to catch errors" do
+    it "should catch errors" do
       begin
         query = @connection.query "this is invalid sql"
         raise "should have failed here"
@@ -17,6 +17,18 @@ describe Downpour do
 
     it "should only accept a string as query" do
       lambda {@connection.query 42}.should raise_error(TypeError)
+    end
+
+    it "should change the database" do
+      @connection.db.should == "test"
+      @connection.db = "blah"
+      @connection.db.should == "blah"
+    end
+
+    it "should read simple attributes" do
+      @connection.port.should == 4427
+      @connection.user.should == ENV["USER"]
+      @connection.password.should == ""
     end
   end
 end
