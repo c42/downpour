@@ -3,7 +3,7 @@ describe "a concurrent query" do
   before(:each) do
     @status = Downpour.create
     @conn = create_connection(@status)
-    @conn2 = create_connection(@status)
+    #@conn2 = create_connection(@status)
     @query1 = @status.add_query(@conn, "select * from Test1 where name like '%oo'");
     #@query2 = @status.add_query(@conn2, "select name from Test1 where name like '%ar'");
   end
