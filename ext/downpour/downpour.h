@@ -16,6 +16,7 @@ typedef void (*FREE_METHOD)(void* ptr);
 typedef void (*SET_CONTEXT)(void* ptr, void *context);
 void *downpour_from_ruby_object(VALUE value);
 VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method, SET_CONTEXT set_context);
+VALUE downpour_get_ruby_object(void *ptr);
 
 // All Constructors
 VALUE downpour_constructor(drizzle_st *self_ptr);

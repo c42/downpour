@@ -75,9 +75,7 @@ static VALUE add_query(VALUE self, VALUE connection, VALUE query)
 static VALUE run_all(VALUE self)
 {
   read_self_ptr();
-
   CHECK_OK(drizzle_query_run_all(self_ptr));
-  
   return Qnil;
 }
 

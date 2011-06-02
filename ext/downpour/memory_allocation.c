@@ -53,6 +53,12 @@ static void mark_for_ruby_gc(DownpourWrapper *wrapper)
   mark_for_ruby_gc(wrapper->parent);
 }
 
+VALUE downpour_get_ruby_object(void *ptr)
+{
+  DownpourWrapper *wrapper = (DownpourWrapper *)ptr;
+  return wrapper->rb_object;
+}
+
 void *downpour_from_ruby_object(VALUE value)
 {
   DownpourWrapper *wrapper = NULL;
