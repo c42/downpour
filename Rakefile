@@ -13,6 +13,7 @@ task :ci do
   sh "sh start_local_drizzle_server_for_tests.sh"
   begin
     Rake::Task['spec'].invoke
+    Rake::Task['copy_gem_to_output'].invoke
   ensure
     sh "drizzle -u " + ENV["USER"] + " --shutdown"
   end
