@@ -12,7 +12,6 @@ static VALUE get_result(VALUE self)
 
   drizzle_result_st *result = drizzle_query_result(self_ptr);
   VALUE ret = rb_iv_set(self, "@result", downpour_result_constructor(result, rb_iv_get(self, "@connection")));
-  rb_iv_set(ret, "@buffered", Qtrue);
   return ret;
 }
 

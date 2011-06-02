@@ -7,19 +7,15 @@ static uint64_t do_column_count(drizzle_result_st *self_ptr)
   return drizzle_result_column_count(self_ptr);
 }
 
-static VALUE is_buffered(VALUE self)
-{
-  VALUE buffered = rb_iv_get(self, "@buffered");
-
-  if(buffered == Qnil || buffered == Qfalse)
-    return Qfalse;
-
-  return buffered;
-}
-
 static bool is_buffered_bool(VALUE self)
 {
-  return RTEST(rb_call(self, "buffered?"));
+  read_self_ptr();
+  return self_ptr->options & (DRIZZLE_RESULT_BUFFER_ROW);
+}
+
+static VALUE is_buffered(VALUE self)
+{
+  return is_buffered_bool(self) ? Qtrue : Qfalse;
 }
 
 static VALUE buffer_if_needed(VALUE self)
@@ -31,7 +27,6 @@ static VALUE buffer_if_needed(VALUE self)
     return Qfalse;
 
   CHECK_OK(drizzle_result_buffer(self_ptr));
-  rb_iv_set(self, "@buffered", Qtrue);
   return Qtrue;
 }
 
