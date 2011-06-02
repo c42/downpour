@@ -17,10 +17,7 @@ static VALUE get_result(VALUE self)
 
 VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE status, VALUE connection)
 {
-  VALUE query = Data_Wrap_Struct(DrizzleQuery, NULL, drizzle_query_free, self_ptr);
-  rb_iv_set(query, "@status", status);
-  rb_iv_set(query, "@connection", connection);
-  return query;
+  return downpour_to_ruby_object(self_ptr, DrizzleQuery, connection, drizzle_query_free);
 }
 
 void init_drizzle_query()

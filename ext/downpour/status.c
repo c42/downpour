@@ -83,7 +83,7 @@ static VALUE run_all(VALUE self)
 
 VALUE downpour_constructor(drizzle_st *self_ptr)
 {
-  return Data_Wrap_Struct(DrizzleStatus, NULL, drizzle_free, self_ptr);
+  return downpour_to_ruby_object(self_ptr, DrizzleStatus, Qnil, drizzle_free);
 }
 
 void init_drizzle_status()

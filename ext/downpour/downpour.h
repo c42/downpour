@@ -12,8 +12,9 @@ extern VALUE DrizzleResult;
 extern VALUE DrizzleQuery;
 
 // All mark and release methods
+typedef void (*FREE_METHOD)(void*);
 void *downpour_from_ruby_object(VALUE value);
-VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, void (*free_method)(void *ptr));
+VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method);
 
 // All Constructors
 VALUE downpour_constructor(drizzle_st *self_ptr);
@@ -26,7 +27,7 @@ void drizzle_gem_assert_value_is_ok(drizzle_return_t value);
 VALUE drizzle_gem_to_string_array(char **array, long count);
 const char *drizzle_gem_read_string_with_default(VALUE string, const char *default_value);
 
-#define convert_to_struct(datatype, var_name, value) datatype *var_name; Data_Get_Struct(value, datatype, var_name)
+#define convert_to_struct(datatype, var_name, value) datatype *var_name; var_name = downpour_from_ruby_object(value)
 #define read_self_ptr() convert_to_struct(SELF_TYPE, self_ptr, self)
 #define CHECK_OK(value) drizzle_gem_assert_value_is_ok(value)
 #define rb_call(self, string) rb_funcall(self, rb_intern(string), 0)

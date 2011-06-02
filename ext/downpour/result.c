@@ -108,9 +108,7 @@ static VALUE error_code(VALUE self)
 
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection)
 {
-  VALUE ret = Data_Wrap_Struct(DrizzleResult, NULL, drizzle_result_free, self_ptr);
-  rb_iv_set(ret, "@connection", connection);
-  return ret;
+  return downpour_to_ruby_object(self_ptr, DrizzleResult, connection, drizzle_result_free);
 }
 
 void init_drizzle_result()

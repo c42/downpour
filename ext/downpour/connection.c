@@ -59,9 +59,7 @@ attr(max_packet_size, UINT2NUM);
 
 VALUE downpour_connection_constructor(drizzle_con_st *self_ptr, VALUE status)
 {
-  VALUE ret = Data_Wrap_Struct(DrizzleConnection, NULL, drizzle_con_free, self_ptr);
-  rb_iv_set(ret, "@status", status);
-  return ret;
+  return downpour_to_ruby_object(self_ptr, DrizzleConnection, status, drizzle_con_free);
 }
 
 void init_drizzle_connection()

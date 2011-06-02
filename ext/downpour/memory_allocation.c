@@ -4,7 +4,7 @@ typedef struct DownpourWrapper {
   int reference_count;
   void *ptr;
   struct DownpourWrapper *parent;
-  void (*free_method)(void *ptr);
+  FREE_METHOD free_method;
 } DownpourWrapper;
 
 static void downpour_mark(DownpourWrapper *wrapper)
@@ -23,13 +23,13 @@ static void downpour_release(DownpourWrapper *wrapper)
   wrapper->reference_count--;
 
   if(wrapper->reference_count == 0) {
-    free_method(wrapper->ptr);
+    wrapper->free_method(wrapper->ptr);
     downpour_release(wrapper->parent);
     free(wrapper);
   }
 }
 
-static DownpourWrapper *downpour_wrap_pointer(void *ptr, DownpourWrapper *parent, void (*free_method)(void *ptr))
+static DownpourWrapper *downpour_wrap_pointer(void *ptr, DownpourWrapper *parent, FREE_METHOD free_method)
 {
   DownpourWrapper *wrapper = drizzle_alloc(DownpourWrapper);
   wrapper->ptr = ptr;
@@ -44,11 +44,12 @@ static DownpourWrapper *downpour_wrap_pointer(void *ptr, DownpourWrapper *parent
 
 void *downpour_from_ruby_object(VALUE value)
 {
-  convert_to_struct(DownpourWrapper, wrapper, value);
+  DownpourWrapper *wrapper = NULL;
+  Data_Get_Struct(value, DownpourWrapper, wrapper);
   return wrapper->ptr;
 }
 
-VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, void (*free_method)(void *ptr))
+VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method)
 {
   DownpourWrapper *parent_ptr = NULL;
   if(parent != Qnil)
