@@ -5,6 +5,7 @@ typedef struct DownpourWrapper {
   void *ptr;
   struct DownpourWrapper *parent;
   FREE_METHOD free_method;
+  VALUE rb_object;
 } DownpourWrapper;
 
 static void downpour_mark(DownpourWrapper *wrapper)
@@ -42,6 +43,16 @@ static DownpourWrapper *downpour_wrap_pointer(void *ptr, DownpourWrapper *parent
   return wrapper;
 }
 
+static void mark_for_ruby_gc(DownpourWrapper *wrapper)
+{
+  if(wrapper == NULL)
+    return;
+
+  rb_gc_mark(wrapper->rb_object);
+
+  mark_for_ruby_gc(wrapper->parent);
+}
+
 void *downpour_from_ruby_object(VALUE value)
 {
   DownpourWrapper *wrapper = NULL;
@@ -59,5 +70,5 @@ VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD 
   if(set_context != NULL)
     set_context(ptr, wrapper);
 
-  return Data_Wrap_Struct(klass, NULL, downpour_release, wrapper);
+  return wrapper->rb_object = Data_Wrap_Struct(klass, mark_for_ruby_gc, downpour_release, wrapper);
 }
