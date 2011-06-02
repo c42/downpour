@@ -29,17 +29,13 @@ describe "a concurrent query" do
   end
 
   context "when executing one at a time" do
-    shared_examples_for "a working concurrent query" do
-      it "should run a query" do
-        rows = []
-        rows << @status.run!.result.next_row
-        rows << @status.run!.result.next_row
-        rows.should include(["foo"])
-        rows.should include(["bar"])
-      end
+    it "should run all queries" do
+      rows = []
+      rows << @status.run!.result.next_row
+      rows << @status.run!.result.next_row
+      rows.should include(["foo"])
+      rows.should include(["bar"])
     end
-
-    it_should_behave_like "a working concurrent query"
 
     it "should return nil after all queries are executed" do
       @status.run!
@@ -51,15 +47,6 @@ describe "a concurrent query" do
       query = @status.run!
       @status.pending_queries.should_not include(query)
       @status.pending_queries.size.should == 1
-    end
-
-    context "when the caller has gced the query" do
-      before(:each) do
-        @query1 = @query2 = nil
-        GC.start
-      end
-
-      it_should_behave_like "a working concurrent query"
     end
   end
 end
