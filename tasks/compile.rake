@@ -14,6 +14,7 @@ begin
   Rake::GemPackageTask.new(gemspec) do |pkg|
     pkg.need_zip = true
     pkg.need_tar = true
+    pkg.package_dir = ENV['BUILD_ARTEFACTS'] || 'pkg'
   end
 rescue LoadError
   puts "rake-compiler, or one of its dependencies, is not available. Install it with: sudo gem install rake-compirer"
