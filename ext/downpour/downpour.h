@@ -11,6 +11,10 @@ extern VALUE DrizzleConnection;
 extern VALUE DrizzleResult;
 extern VALUE DrizzleQuery;
 
+// All mark and release methods
+void *downpour_from_ruby_object(VALUE value);
+VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, void (*free_method)(void *ptr));
+
 // All Constructors
 VALUE downpour_constructor(drizzle_st *self_ptr);
 VALUE downpour_connection_constructor(drizzle_con_st *self_ptr, VALUE status);
