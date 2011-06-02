@@ -10,6 +10,6 @@ task :ci do
   begin
     Rake::Task['spec'].invoke
   ensure
-    sh "drizzle --shutdown"
+    sh "drizzle -u " + ENV["USER"] + " --shutdown"
   end
 end
