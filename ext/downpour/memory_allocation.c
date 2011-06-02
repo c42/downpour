@@ -53,25 +53,38 @@ static void mark_for_ruby_gc(DownpourWrapper *wrapper)
   mark_for_ruby_gc(wrapper->parent);
 }
 
+static DownpourWrapper *get_wrapper_from_object(VALUE value)
+{
+  if(value == Qnil)
+    return NULL;
+
+  DownpourWrapper *wrapper = NULL;
+  Data_Get_Struct(value, DownpourWrapper, wrapper);
+  return wrapper;
+}
+
 VALUE downpour_get_ruby_object(void *ptr)
 {
+  if(ptr == NULL)
+    return Qnil;
+
   DownpourWrapper *wrapper = (DownpourWrapper *)ptr;
   return wrapper->rb_object;
 }
 
 void *downpour_from_ruby_object(VALUE value)
 {
-  DownpourWrapper *wrapper = NULL;
-  Data_Get_Struct(value, DownpourWrapper, wrapper);
-  return wrapper->ptr;
+  DownpourWrapper *wrapper;
+  wrapper = get_wrapper_from_object(value);
+  return wrapper == NULL? NULL : wrapper->ptr;
 }
 
 VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method, SET_CONTEXT set_context)
 {
-  DownpourWrapper *parent_ptr = NULL;
-  if(parent != Qnil)
-    Data_Get_Struct(parent, DownpourWrapper, parent_ptr);
-  DownpourWrapper *wrapper = downpour_wrap_pointer(ptr, parent_ptr, free_method);
+  if(ptr == NULL)
+    return Qnil;
+
+  DownpourWrapper *wrapper = downpour_wrap_pointer(ptr, get_wrapper_from_object(parent), free_method);
 
   if(set_context != NULL)
     set_context(ptr, wrapper);

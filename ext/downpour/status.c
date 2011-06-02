@@ -79,6 +79,19 @@ static VALUE run_all(VALUE self)
   return Qnil;
 }
 
+static VALUE run_one(VALUE self)
+{
+  read_self_ptr();
+  drizzle_return_t ret;
+  drizzle_query_st *query = drizzle_query_run(self_ptr, &ret);
+  CHECK_OK(ret);
+
+  if(query == NULL)
+    return Qnil;
+
+  return downpour_get_ruby_object(drizzle_query_context(query));
+}
+
 VALUE downpour_constructor(drizzle_st *self_ptr)
 {
   return to_ruby_object(self_ptr, DrizzleStatus, Qnil, drizzle_free, drizzle_set_context);
@@ -94,4 +107,5 @@ void init_drizzle_status()
   rb_define_method(DrizzleStatus, "verbose_name", verbose_name, 0);
   rb_define_method(DrizzleStatus, "add_query", add_query, 2);
   rb_define_method(DrizzleStatus, "run_all!", run_all, 0);
+  rb_define_method(DrizzleStatus, "run!", run_one, 0);
 }

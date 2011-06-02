@@ -19,4 +19,13 @@ describe "a concurrent query" do
     @query1.result.next_row.should == ["foo"]
     @query2.result.next_row.should == ["bar"]
   end
+
+  it "should run a query" do
+    rows = []
+    rows << @status.run!.result.next_row
+    rows << @status.run!.result.next_row
+    rows.should include(["foo"])
+    rows.should include(["bar"])
+    @status.run!.should be_nil
+  end
 end
