@@ -105,6 +105,12 @@ static VALUE insert_id(VALUE self)
   return UINT2NUM(drizzle_result_insert_id(self_ptr));
 }
 
+static VALUE error_code(VALUE self)
+{
+  read_self_ptr();
+  return UINT2NUM(drizzle_result_error_code(self_ptr));
+}
+
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection)
 {
   VALUE ret = Data_Wrap_Struct(DrizzleResult, NULL, drizzle_result_free, self_ptr);
@@ -121,4 +127,5 @@ void init_drizzle_result()
   rb_define_method(DrizzleResult, "buffered?", is_buffered, 0);
   rb_define_method(DrizzleResult, "next_row", next_row, 0);
   rb_define_method(DrizzleResult, "insert_id", insert_id, 0);
+  rb_define_method(DrizzleResult, "error_code", error_code, 0);
 }

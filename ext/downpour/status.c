@@ -60,6 +60,27 @@ static VALUE verbose_name(VALUE self)
   return rb_str_new2(drizzle_verbose_name(drizzle_verbose(self_ptr)));
 }
 
+static VALUE add_query(VALUE self, VALUE connection, VALUE query)
+{
+  read_self_ptr();
+  convert_to_struct(drizzle_con_st, connection_ptr, connection);
+  Check_Type(query, T_STRING);
+
+  drizzle_query_st *query_ptr = drizzle_query_add(self_ptr, NULL, connection_ptr, NULL, 
+                                                    RSTRING_PTR(query), RSTRING_LEN(query), 0, NULL);
+
+  return downpour_query_constructor(query_ptr, self, connection);
+}
+
+static VALUE run_all(VALUE self)
+{
+  read_self_ptr();
+
+  CHECK_OK(drizzle_query_run_all(self_ptr));
+  
+  return Qnil;
+}
+
 VALUE downpour_constructor(drizzle_st *self_ptr)
 {
   return Data_Wrap_Struct(DrizzleStatus, NULL, drizzle_free, self_ptr);
@@ -73,4 +94,6 @@ void init_drizzle_status()
   rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);
   rb_define_method(DrizzleStatus, "verbose", get_verbose, 0);
   rb_define_method(DrizzleStatus, "verbose_name", verbose_name, 0);
+  rb_define_method(DrizzleStatus, "add_query", add_query, 2);
+  rb_define_method(DrizzleStatus, "run_all!", run_all, 0);
 }
