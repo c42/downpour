@@ -59,7 +59,7 @@ attr(max_packet_size, UINT2NUM);
 
 VALUE downpour_connection_constructor(drizzle_con_st *self_ptr, VALUE status)
 {
-  return to_ruby_object(self_ptr, DrizzleConnection, status, drizzle_con_free);
+  return to_ruby_object(self_ptr, DrizzleConnection, status, drizzle_con_free, drizzle_con_set_context);
 }
 
 void init_drizzle_connection()

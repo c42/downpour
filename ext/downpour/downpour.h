@@ -12,9 +12,10 @@ extern VALUE DrizzleResult;
 extern VALUE DrizzleQuery;
 
 // All mark and release methods
-typedef void (*FREE_METHOD)(void*);
+typedef void (*FREE_METHOD)(void* ptr);
+typedef void (*SET_CONTEXT)(void* ptr, void *context);
 void *downpour_from_ruby_object(VALUE value);
-VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method);
+VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method, SET_CONTEXT set_context);
 
 // All Constructors
 VALUE downpour_constructor(drizzle_st *self_ptr);
@@ -33,6 +34,6 @@ const char *drizzle_gem_read_string_with_default(VALUE string, const char *defau
 #define rb_call(self, string) rb_funcall(self, rb_intern(string), 0)
 #define read_string(value, default_value) drizzle_gem_read_string_with_default(value, default_value)
 #define drizzle_alloc(type) ((type *) malloc(sizeof(type)))
-#define to_ruby_object(ptr, klass, parent, free_method) downpour_to_ruby_object(ptr, klass, parent, (FREE_METHOD) (free_method))
+#define to_ruby_object(ptr, klass, parent, free_method, set_context) downpour_to_ruby_object(ptr, klass, parent, (FREE_METHOD) (free_method), (SET_CONTEXT) (set_context))
 
 #endif

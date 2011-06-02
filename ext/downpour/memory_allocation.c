@@ -49,11 +49,15 @@ void *downpour_from_ruby_object(VALUE value)
   return wrapper->ptr;
 }
 
-VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method)
+VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method, SET_CONTEXT set_context)
 {
   DownpourWrapper *parent_ptr = NULL;
   if(parent != Qnil)
     Data_Get_Struct(parent, DownpourWrapper, parent_ptr);
   DownpourWrapper *wrapper = downpour_wrap_pointer(ptr, parent_ptr, free_method);
+
+  if(set_context != NULL)
+    set_context(ptr, wrapper);
+
   return Data_Wrap_Struct(klass, NULL, downpour_release, wrapper);
 }
