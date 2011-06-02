@@ -105,7 +105,7 @@ void init_drizzle_status()
   rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);
   rb_define_method(DrizzleStatus, "verbose", get_verbose, 0);
   rb_define_method(DrizzleStatus, "verbose_name", verbose_name, 0);
-  rb_define_method(DrizzleStatus, "add_query", add_query, 2);
-  rb_define_method(DrizzleStatus, "run_all!", run_all, 0);
-  rb_define_method(DrizzleStatus, "run!", run_one, 0);
+  rb_define_private_method(DrizzleStatus, "_add_query", add_query, 2);
+  rb_define_method(DrizzleStatus, "_run_all!", run_all, 0);
+  rb_define_method(DrizzleStatus, "_run!", run_one, 0);
 }
