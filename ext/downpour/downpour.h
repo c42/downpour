@@ -20,7 +20,7 @@ VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD 
 VALUE downpour_constructor(drizzle_st *self_ptr);
 VALUE downpour_connection_constructor(drizzle_con_st *self_ptr, VALUE status);
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection);
-VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE status, VALUE connection);
+VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE connection);
 
 VALUE drizzle_gem_create_class_with_private_constructor(const char *name, VALUE super);
 void drizzle_gem_assert_value_is_ok(drizzle_return_t value);

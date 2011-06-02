@@ -69,7 +69,7 @@ static VALUE add_query(VALUE self, VALUE connection, VALUE query)
   drizzle_query_st *query_ptr = drizzle_query_add(self_ptr, NULL, connection_ptr, NULL, 
                                                     RSTRING_PTR(query), RSTRING_LEN(query), 0, NULL);
 
-  return downpour_query_constructor(query_ptr, self, connection);
+  return downpour_query_constructor(query_ptr, connection);
 }
 
 static VALUE run_all(VALUE self)

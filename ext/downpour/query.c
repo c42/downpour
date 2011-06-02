@@ -15,7 +15,7 @@ static VALUE get_result(VALUE self)
   return ret;
 }
 
-VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE status, VALUE connection)
+VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE connection)
 {
   return downpour_to_ruby_object(self_ptr, DrizzleQuery, connection, drizzle_query_free);
 }
