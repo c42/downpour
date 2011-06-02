@@ -1,4 +1,4 @@
-describe "Downpour connections" do
+describe "downpour connections" do
 
   before(:each) do
     @status = Downpour.create
