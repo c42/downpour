@@ -2,9 +2,10 @@
 
 export PATH=$PATH:/usr/sbin:/usr/local/sbin
 
-rm -rf tmp/database
-mkdir -p tmp/database
-drizzled --no-defaults --datadir=$PWD/tmp/database -d
+DATABASE=$PWD/tmp/database
+rm -rf $DATABASE
+mkdir -p $DATABASE
+drizzled --no-defaults --datadir=$DATABASE -d
 
 echo Creating a new test database
 echo "create database test;" | drizzle -u $USER
