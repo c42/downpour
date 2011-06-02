@@ -4,7 +4,6 @@ describe "a select query" do
     @status = Downpour.create
     @conn = create_connection(@status)
     @results = @conn.query "select * from Test1"
-    GC.start
   end
 
   it "should count records" do
