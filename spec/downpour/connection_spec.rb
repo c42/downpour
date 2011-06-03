@@ -18,6 +18,14 @@ describe "downpour connections" do
     it "should only accept a string as query" do
       lambda {@connection.query 42}.should raise_error(TypeError)
     end
+
+    it "should throw error if you try to read a row then buffer" do
+      lambda do
+        q = @connection.query "select * from Test1"
+        q.next_row
+        q.buffer!
+      end.should raise_error(IOError)
+    end
   end
   
   context "simple attributes" do

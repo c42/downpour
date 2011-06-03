@@ -25,9 +25,22 @@ static VALUE is_buffered(VALUE self)
   return is_buffered_bool(self) ? Qtrue : Qfalse;
 }
 
+static void raise_if_buffering_is_not_allowed(VALUE self)
+{
+  if(RTEST(rb_iv_get(self, "@cannot_buffer")))
+      rb_raise(rb_eIOError, "cannot buffer after reading a row");
+}
+
+static void disallow_buffering(VALUE self)
+{
+  rb_iv_set(self, "@cannot_buffer", Qtrue);
+}
+
 static VALUE buffer_if_needed(VALUE self)
 {
   read_self_ptr();
+
+  raise_if_buffering_is_not_allowed(self);
 
   // Only buffer once
   if(is_buffered_bool(self))
@@ -87,6 +100,8 @@ static VALUE next_row_unbuffered(drizzle_result_st *self_ptr)
 static VALUE next_row(VALUE self)
 {
   read_self_ptr();
+
+  disallow_buffering(self);
 
   if(is_buffered_bool(self))
     return next_row_buffered(self_ptr);
