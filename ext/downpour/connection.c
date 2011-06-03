@@ -1,24 +1,20 @@
 #include "downpour.h"
 
 #define SELF_TYPE drizzle_con_st
+#define RUBY_CLASS DrizzleConnection
+
 #define attr(foo, conversion) static VALUE attr_##foo(VALUE self)\
 {\
   read_self_ptr();\
   return conversion(drizzle_con_##foo(self_ptr));\
 }
-#define settr(foo) static VALUE settr_##foo(VALUE self, VALUE newValue)\
+#define settr_string(foo) static VALUE settr_##foo(VALUE self, VALUE newValue)\
 {\
   read_self_ptr();\
   Check_Type(newValue, T_STRING);\
   drizzle_con_set_##foo(self_ptr, RSTRING_PTR(newValue));\
   return newValue;\
 }
-#define attr_string(foo) attr(foo, rb_str_new2)
-#define prop(foo) attr_string(foo) settr(foo)
-
-#define define_attr(foo) rb_define_method(DrizzleConnection, #foo, attr_##foo, 0)
-#define define_settr(foo) rb_define_method(DrizzleConnection, #foo "=", settr_##foo, 1)
-#define define_prop(foo) define_attr(foo); define_settr(foo)
 
 static VALUE query(VALUE self, VALUE query)
 {
@@ -41,16 +37,17 @@ static VALUE connection_close(VALUE self)
   return Qnil;
 }
 
+attr(options, INT2NUM);
 attr_string(error);
 attr(errno, INT2NUM);
 attr(error_code, UINT2NUM);
 attr_string(sqlstate);
 attr_string(host);
 attr(port, UINT2NUM);
-prop(uds);
+prop_string(uds);
 attr_string(user);
 attr_string(password);
-prop(db);
+prop_string(db);
 attr(protocol_version, UINT2NUM);
 attr_string(server_version);
 attr(server_version_number, UINT2NUM);
@@ -66,6 +63,7 @@ void init_drizzle_connection()
 {
   DrizzleConnection = drizzle_gem_create_class_with_private_constructor("Connection", rb_cObject);
   rb_define_method(DrizzleConnection, "query", query, 1);
+  define_attr(options);
   define_attr(error);
   define_attr(errno);
   define_attr(error_code);

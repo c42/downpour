@@ -38,4 +38,12 @@ const char *drizzle_gem_read_string_with_default(VALUE string, const char *defau
 #define drizzle_alloc(type) ((type *) malloc(sizeof(type)))
 #define to_ruby_object(ptr, klass, parent, free_method, set_context) downpour_to_ruby_object(ptr, klass, parent, (FREE_METHOD) (free_method), (SET_CONTEXT) (set_context))
 
+// Property Macros -> define attr(foo, conversion) and settr_string to use them
+#define attr_string(foo) attr(foo, rb_str_new2)
+#define prop_string(foo) attr_string(foo) settr_string(foo)
+
+#define define_attr(foo) rb_define_method(RUBY_CLASS, #foo, attr_##foo, 0)
+#define define_settr(foo) rb_define_method(RUBY_CLASS, #foo "=", settr_##foo, 1)
+#define define_prop(foo) define_attr(foo); define_settr(foo)
+
 #endif
