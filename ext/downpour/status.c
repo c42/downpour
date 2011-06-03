@@ -2,6 +2,21 @@
 
 #define SELF_TYPE drizzle_st
 
+#define RUBY_CLASS DrizzleStatus
+
+#define attr(foo, conversion) static VALUE attr_##foo(VALUE self)\
+{\
+  read_self_ptr();\
+  return conversion(drizzle_##foo(self_ptr));\
+}
+
+#define settr_int(foo) static VALUE settr_##foo(VALUE self, VALUE newValue)\
+{\
+  read_self_ptr();\
+  drizzle_set_##foo(self_ptr, NUM2INT(newValue));\
+  return newValue;\
+}
+
 static in_port_t get_port(VALUE port, in_port_t default_port)
 {
   if(port == Qnil)
@@ -39,37 +54,6 @@ static VALUE add_mysql_tcp_connection(int argc, VALUE *argv, VALUE self)
   return add_tcp_connection_with_defaults(argc, argv, self, 3306, DRIZZLE_CON_MYSQL);
 }
 
-static VALUE error(VALUE self)
-{
-  read_self_ptr();
-
-  return rb_str_new2(drizzle_error(self_ptr));
-}
-
-static VALUE set_verbose(VALUE self, VALUE newVerbocity)
-{
-  read_self_ptr();
-
-  int verbocity = NUM2INT(newVerbocity);
-  drizzle_set_verbose(self_ptr, verbocity);
-
-  return newVerbocity;
-}
-
-static VALUE get_verbose(VALUE self)
-{
-  read_self_ptr();
-
-  return UINT2NUM(drizzle_verbose(self_ptr));
-}
-
-static VALUE verbose_name(VALUE self)
-{
-  read_self_ptr();
-
-  return rb_str_new2(drizzle_verbose_name(drizzle_verbose(self_ptr)));
-}
-
 static VALUE add_query(VALUE self, VALUE connection, VALUE query)
 {
   read_self_ptr();
@@ -102,6 +86,21 @@ static VALUE run_one(VALUE self)
   return downpour_get_ruby_object(drizzle_query_context(query));
 }
 
+static VALUE verbose_name(VALUE self)
+{
+  read_self_ptr();
+
+  return rb_str_new2(drizzle_verbose_name(drizzle_verbose(self_ptr)));
+}
+
+attr_string(error);
+attr(errno, INT2NUM);
+attr(error_code, INT2NUM);
+attr_string(sqlstate);
+attr(options, UINT2NUM);
+prop_int(timeout, INT2NUM);
+prop_int(verbose, UINT2NUM);
+
 VALUE downpour_constructor(drizzle_st *self_ptr)
 {
   return to_ruby_object(self_ptr, DrizzleStatus, Qnil, drizzle_free, drizzle_set_context);
@@ -112,11 +111,15 @@ void init_drizzle_status()
   DrizzleStatus = drizzle_gem_create_class_with_private_constructor("Status", rb_cObject);
   rb_define_method(DrizzleStatus, "add_tcp_connection", add_tcp_connection, -1);
   rb_define_method(DrizzleStatus, "add_mysql_tcp_connection", add_mysql_tcp_connection, -1);
-  rb_define_method(DrizzleStatus, "error", error, 0);
-  rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);
-  rb_define_method(DrizzleStatus, "verbose", get_verbose, 0);
   rb_define_method(DrizzleStatus, "verbose_name", verbose_name, 0);
   rb_define_private_method(DrizzleStatus, "_add_query", add_query, 2);
   rb_define_private_method(DrizzleStatus, "_run_all!", run_all, 0);
   rb_define_private_method(DrizzleStatus, "_run!", run_one, 0);
+  define_attr(error);
+  define_attr(errno);
+  define_attr(error_code);
+  define_attr(sqlstate);
+  define_attr(options);
+  define_prop(timeout);
+  define_prop(verbose);
 }

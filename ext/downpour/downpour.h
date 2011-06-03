@@ -41,6 +41,7 @@ const char *drizzle_gem_read_string_with_default(VALUE string, const char *defau
 // Property Macros -> define attr(foo, conversion) and settr_string to use them
 #define attr_string(foo) attr(foo, rb_str_new2)
 #define prop_string(foo) attr_string(foo) settr_string(foo)
+#define prop_int(foo, conversion) attr(foo, conversion) settr_int(foo)
 
 #define define_attr(foo) rb_define_method(RUBY_CLASS, #foo, attr_##foo, 0)
 #define define_settr(foo) rb_define_method(RUBY_CLASS, #foo "=", settr_##foo, 1)
