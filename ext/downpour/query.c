@@ -11,7 +11,8 @@ static VALUE get_result(VALUE self)
     return cached_result;
 
   drizzle_result_st *result = drizzle_query_result(self_ptr);
-  VALUE ret = rb_iv_set(self, "@result", downpour_result_constructor(result, rb_iv_get(self, "@connection")));
+  VALUE connection = downpour_get_parent(self);
+  VALUE ret = rb_iv_set(self, "@result", downpour_result_constructor(result, connection));
   return ret;
 }
 
