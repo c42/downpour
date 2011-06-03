@@ -1,6 +1,13 @@
 #include "downpour.h"
 
 #define SELF_TYPE drizzle_result_st
+#define RUBY_CLASS DrizzleResult
+
+#define attr(foo, conversion) static VALUE attr_##foo(VALUE self)\
+{\
+  read_self_ptr();\
+  return conversion(drizzle_result_##foo(self_ptr));\
+}
 
 static uint64_t do_column_count(drizzle_result_st *self_ptr)
 {
@@ -87,30 +94,14 @@ static VALUE next_row(VALUE self)
   return next_row_unbuffered(self_ptr);
 }
 
-static VALUE column_count(VALUE self)
-{
-  read_self_ptr();
-  return UINT2NUM(do_column_count(self_ptr));
-}
-
-static VALUE insert_id(VALUE self)
-{
-  read_self_ptr();
-
-  return UINT2NUM(drizzle_result_insert_id(self_ptr));
-}
-
-static VALUE error_code(VALUE self)
-{
-  read_self_ptr();
-  return UINT2NUM(drizzle_result_error_code(self_ptr));
-}
-
-static VALUE affected_rows(VALUE self)
-{
-  read_self_ptr();
-  return UINT2NUM(drizzle_result_affected_rows(self_ptr));
-}
+attr(column_count, UINT2NUM);
+attr(insert_id, UINT2NUM);
+attr(error_code, UINT2NUM);
+attr(affected_rows, UINT2NUM);
+attr(warning_count, UINT2NUM);
+attr_string(sqlstate);
+attr_string(info);
+attr_string(error);
 
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection)
 {
@@ -121,11 +112,15 @@ void init_drizzle_result()
 {
   DrizzleResult = drizzle_gem_create_class_with_private_constructor("Result", rb_cObject);
   rb_define_method(DrizzleResult, "row_count", row_count, 0);
-  rb_define_method(DrizzleResult, "column_count", column_count, 0);
   rb_define_method(DrizzleResult, "buffer!", buffer_if_needed, 0);
   rb_define_method(DrizzleResult, "buffered?", is_buffered, 0);
   rb_define_method(DrizzleResult, "next_row", next_row, 0);
-  rb_define_method(DrizzleResult, "insert_id", insert_id, 0);
-  rb_define_method(DrizzleResult, "error_code", error_code, 0);
-  rb_define_method(DrizzleResult, "affected_rows", affected_rows, 0);
+  define_attr(column_count);
+  define_attr(insert_id);
+  define_attr(error_code);
+  define_attr(affected_rows);
+  define_attr(warning_count);
+  define_attr(sqlstate);
+  define_attr(info);
+  define_attr(error);
 }

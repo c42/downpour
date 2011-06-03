@@ -1,7 +1,6 @@
 #include "downpour.h"
 
 #define SELF_TYPE drizzle_st
-
 #define RUBY_CLASS DrizzleStatus
 
 #define attr(foo, conversion) static VALUE attr_##foo(VALUE self)\
