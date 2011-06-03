@@ -91,3 +91,13 @@ VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD 
 
   return wrapper->rb_object = Data_Wrap_Struct(klass, mark_for_ruby_gc, downpour_release, wrapper);
 }
+
+VALUE downpour_get_parent(VALUE self)
+{
+  DownpourWrapper *wrapper = get_wrapper_from_object(self);
+
+  if(wrapper == NULL || wrapper->parent == NULL)
+    return Qnil;
+
+  return wrapper->parent->rb_object;
+}

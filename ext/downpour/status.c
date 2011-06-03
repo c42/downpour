@@ -2,15 +2,15 @@
 
 #define SELF_TYPE drizzle_st
 
-static in_port_t get_port(VALUE port)
+static in_port_t get_port(VALUE port, in_port_t default_port)
 {
   if(port == Qnil)
-    return DRIZZLE_DEFAULT_TCP_PORT;
+    return default_port;
   Check_Type(port, T_FIXNUM);
   return NUM2UINT(port);
 }
 
-static VALUE add_tcp_connection(int argc, VALUE *argv, VALUE self)
+static VALUE add_tcp_connection_with_defaults(int argc, VALUE *argv, VALUE self, in_port_t default_port, drizzle_con_options_t default_options)
 {
   read_self_ptr();
 
@@ -21,12 +21,22 @@ static VALUE add_tcp_connection(int argc, VALUE *argv, VALUE self)
 
   drizzle_con_st *connection = drizzle_con_add_tcp(self_ptr, NULL, 
                                                     read_string(host, "localhost"), 
-                                                    get_port(port),
+                                                    get_port(port, default_port),
                                                     read_string(user, ""),
                                                     read_string(passwd, ""),
                                                     read_string(db, "test"),
-                                                    DRIZZLE_CON_NONE);
+                                                    default_options);
   return downpour_connection_constructor(connection, self);
+}
+
+static VALUE add_tcp_connection(int argc, VALUE *argv, VALUE self)
+{
+  return add_tcp_connection_with_defaults(argc, argv, self, DRIZZLE_DEFAULT_TCP_PORT, DRIZZLE_CON_NONE);
+}
+
+static VALUE add_mysql_tcp_connection(int argc, VALUE *argv, VALUE self)
+{
+  return add_tcp_connection_with_defaults(argc, argv, self, 3306, DRIZZLE_CON_MYSQL);
 }
 
 static VALUE error(VALUE self)
@@ -101,6 +111,7 @@ void init_drizzle_status()
 {
   DrizzleStatus = drizzle_gem_create_class_with_private_constructor("Status", rb_cObject);
   rb_define_method(DrizzleStatus, "add_tcp_connection", add_tcp_connection, -1);
+  rb_define_method(DrizzleStatus, "add_mysql_tcp_connection", add_mysql_tcp_connection, -1);
   rb_define_method(DrizzleStatus, "error", error, 0);
   rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);
   rb_define_method(DrizzleStatus, "verbose", get_verbose, 0);

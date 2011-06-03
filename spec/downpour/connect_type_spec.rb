@@ -26,10 +26,33 @@ describe "downpour connections" do
   end
 
   context "over drizzle tcp protocol" do
-    before(:each) do
-      @connection = @status.add_tcp_connection('localhost', @user, @password, @database)
+    it "should have default port set" do
+      connection = @status.add_tcp_connection('localhost', @user, @password, @database)
+      connection.port.should == 4427
     end
 
-    it_should_behave_like "a working downpour connection"
+    context "connection sanity" do
+      before(:each) do
+        @connection = @status.add_tcp_connection('localhost', @user, @password, @database)
+      end
+
+      it_should_behave_like "a working downpour connection"
+    end
+  end
+
+  context "over mysql tcp protocol" do
+    it "should have default port set" do
+      connection = @status.add_mysql_tcp_connection('localhost', @user, @password, @database)
+      connection.port.should == 3306
+    end
+
+    context "connection sanity" do
+      before(:each) do
+        # connect to drizzle over a mysql db
+        @connection = @status.add_mysql_tcp_connection('localhost', @user, @password, @database, 4427)
+      end
+
+      it_should_behave_like "a working downpour connection"
+    end
   end
 end
