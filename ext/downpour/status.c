@@ -34,6 +34,11 @@ static VALUE add_tcp_connection(int argc, VALUE *argv, VALUE self)
   return add_tcp_connection_with_defaults(argc, argv, self, DRIZZLE_DEFAULT_TCP_PORT, DRIZZLE_CON_NONE);
 }
 
+static VALUE add_mysql_tcp_connection(int argc, VALUE *argv, VALUE self)
+{
+  return add_tcp_connection_with_defaults(argc, argv, self, 3306, DRIZZLE_CON_MYSQL);
+}
+
 static VALUE error(VALUE self)
 {
   read_self_ptr();
@@ -106,6 +111,7 @@ void init_drizzle_status()
 {
   DrizzleStatus = drizzle_gem_create_class_with_private_constructor("Status", rb_cObject);
   rb_define_method(DrizzleStatus, "add_tcp_connection", add_tcp_connection, -1);
+  rb_define_method(DrizzleStatus, "add_mysql_tcp_connection", add_mysql_tcp_connection, -1);
   rb_define_method(DrizzleStatus, "error", error, 0);
   rb_define_method(DrizzleStatus, "verbose=", set_verbose, 1);
   rb_define_method(DrizzleStatus, "verbose", get_verbose, 0);
