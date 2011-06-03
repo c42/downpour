@@ -106,6 +106,12 @@ static VALUE error_code(VALUE self)
   return UINT2NUM(drizzle_result_error_code(self_ptr));
 }
 
+static VALUE affected_rows(VALUE self)
+{
+  read_self_ptr();
+  return UINT2NUM(drizzle_result_affected_rows(self_ptr));
+}
+
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection)
 {
   return to_ruby_object(self_ptr, DrizzleResult, connection, drizzle_result_free, NULL);
@@ -121,4 +127,5 @@ void init_drizzle_result()
   rb_define_method(DrizzleResult, "next_row", next_row, 0);
   rb_define_method(DrizzleResult, "insert_id", insert_id, 0);
   rb_define_method(DrizzleResult, "error_code", error_code, 0);
+  rb_define_method(DrizzleResult, "affected_rows", affected_rows, 0);
 }

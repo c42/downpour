@@ -16,4 +16,8 @@ describe "an insert query" do
   it "should get id after inserting" do
     @conn.query("insert into Test2 (name) values ('foo')").insert_id.should == count_of_test2
   end
+
+  it "should get count of affected rows" do
+    @conn.query("insert into Test2 (name) values ('foo')").affected_rows.should == 1
+  end
 end
