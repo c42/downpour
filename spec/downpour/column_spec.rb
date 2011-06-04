@@ -3,7 +3,7 @@ describe "a drizzle result" do
   before(:each) do
     @status = Downpour.create
     @conn = create_connection(@status)
-    @results = @conn.query "select * from Test2"
+    @results = @conn.query "select id, name as newName from Test2"
   end
 
   it "should fetch all columns" do
@@ -16,7 +16,15 @@ describe "a drizzle result" do
 
   it "should fetch column name" do
     @results.columns[0].name.should == "id"
-    @results.columns[1].name.should == "name"
+    @results.columns[1].name.should == "newName"
+  end
+
+  it "should fetch the original name from table" do
+    @results.columns[1].orig_name.should == "name"
+  end
+
+  it "should have table name set on column" do
+    @results.columns[0].table.should == "Test2"
   end
 
   it "should not buffer after reading columns" do

@@ -5,6 +5,6 @@ Downpour is a gem to connect and query a Drizzle or MySql database using the lib
 == TODO
 * Do not maintain a list of pending queries and connections in ruby. Mark and sweep. Is this a good idea
 * Actually honor some options passed in to drizzle_con_create
-* Get column info and do stuff
+* Get column type and do stuff. 
 * Create a rails plugin
 * Result, Column does not have a context. Memory Leak?
