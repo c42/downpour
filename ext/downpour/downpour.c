@@ -5,12 +5,14 @@ VALUE DrizzleStatus;
 VALUE DrizzleConnection;
 VALUE DrizzleResult;
 VALUE DrizzleQuery;
+VALUE DrizzleColumn;
 
 void init_downpour_module();
 void init_drizzle_status();
 void init_drizzle_connection();
 void init_drizzle_result();
 void init_drizzle_query();
+void init_drizzle_column();
 
 void Init_downpour()
 {
@@ -19,4 +21,5 @@ void Init_downpour()
   init_drizzle_connection();
   init_drizzle_result();
   init_drizzle_query();
+  init_drizzle_column();
 }

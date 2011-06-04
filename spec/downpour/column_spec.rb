@@ -14,6 +14,11 @@ describe "a drizzle result" do
     @results.column_count.should == 2
   end
 
+  it "should fetch column name" do
+    @results.columns[0].name.should == "id"
+    @results.columns[1].name.should == "name"
+  end
+
   it "should not buffer after reading columns" do
     @results.columns
     @results.should_not be_buffered

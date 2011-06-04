@@ -109,6 +109,13 @@ static VALUE next_row(VALUE self)
   return next_row_unbuffered(self_ptr);
 }
 
+static VALUE next_column(VALUE self)
+{
+  read_self_ptr();
+  buffer_column_if_needed(self_ptr);
+  return downpour_column_constructor(drizzle_column_next(self_ptr), self);
+}
+
 attr(column_count, UINT2NUM);
 attr(insert_id, UINT2NUM);
 attr(error_code, UINT2NUM);
@@ -130,6 +137,7 @@ void init_drizzle_result()
   rb_define_method(DrizzleResult, "buffer!", buffer_if_needed, 0);
   rb_define_method(DrizzleResult, "buffered?", is_buffered, 0);
   rb_define_method(DrizzleResult, "next_row", next_row, 0);
+  rb_define_private_method(DrizzleResult, "next_column", next_column, 0);
   define_attr(column_count);
   define_attr(insert_id);
   define_attr(error_code);
