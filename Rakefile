@@ -5,7 +5,7 @@ require 'rake'
 Dir['tasks/*.rake'].sort.each { |f| load f }
 
 desc 'To be used by the CI server'
-task :ci do
+task :ci => :clean do
   sh "sh start_local_drizzle_server_for_tests.sh"
   begin
     Rake::Task['spec'].invoke
