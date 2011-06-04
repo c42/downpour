@@ -29,10 +29,6 @@ describe "a select query" do
       @results.next_row.should == ["baz"]
       @results.next_row.should be_nil
     end
-
-    it "should count columns" do
-      @results.column_count.should == 1
-    end
   end
 
   context "without buffering" do
