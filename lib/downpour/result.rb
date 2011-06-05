@@ -1,5 +1,5 @@
 module Downpour
-  class BufferedResult
+  module Result
     attr_reader :columns
   end
 end
