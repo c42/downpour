@@ -37,6 +37,10 @@ describe "a concurrent query" do
       @status.run!.should be_nil
     end
 
+    it "should have buffered the results" do
+      @status.run!.result.should be_buffered
+    end
+
     it "should release pending queries" do
       query = @status.run!
       @status.pending_queries.should_not include(query)

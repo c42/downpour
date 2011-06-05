@@ -1,4 +1,5 @@
 #include "downpour.h"
+#include "result.h"
 
 #define SELF_TYPE drizzle_result_st
 #define RUBY_CLASS DrizzleResult
@@ -7,6 +8,18 @@
 {\
   read_self_ptr();\
   return conversion(drizzle_result_##foo(self_ptr));\
+}
+
+bool downpour_is_buffered(drizzle_result_st *self_ptr)
+{
+  return self_ptr->options & (DRIZZLE_RESULT_BUFFER_ROW);
+}
+
+static VALUE is_buffered(VALUE self)
+{
+  read_self_ptr();
+
+  return downpour_is_buffered(self_ptr) ? Qtrue : Qfalse;
 }
 
 static void buffer_column_if_needed(drizzle_result_st *self_ptr)
@@ -80,6 +93,7 @@ VALUE downpour_include_result_module(drizzle_result_st *self_ptr, VALUE result)
 void init_drizzle_result()
 {
   DrizzleResult = rb_define_module_under(DownpourModule, "Result");
+  rb_define_method(DrizzleResult, "buffered?", is_buffered, 0);
   define_attr(column_count);
   define_attr(insert_id);
   define_attr(error_code);

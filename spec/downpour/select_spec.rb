@@ -31,7 +31,9 @@ describe "a select query" do
   end
 
   context "with buffering" do
-    #before(:each) { @results.buffer! }
+    it "should be buffered" do
+      @results.should be_buffered
+    end
 
     it_should_behave_like "a read query"
   end

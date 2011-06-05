@@ -1,4 +1,5 @@
 #include "downpour.h"
+#include "result.h"
 
 #define SELF_TYPE drizzle_result_st
 #define RUBY_CLASS DrizzleBufferedResult
@@ -9,15 +10,10 @@
   return conversion(drizzle_result_##foo(self_ptr));\
 }
 
-static bool is_buffered(drizzle_result_st *self_ptr)
-{
-  return self_ptr->options & (DRIZZLE_RESULT_BUFFER_ROW);
-}
-
 static void buffer_if_needed(drizzle_result_st *self_ptr)
 {
   // Only buffer once
-  if(is_buffered(self_ptr))
+  if(downpour_is_buffered(self_ptr))
     return;
 
   CHECK_OK(drizzle_result_buffer(self_ptr));
