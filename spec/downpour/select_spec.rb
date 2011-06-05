@@ -8,18 +8,10 @@ describe "a select query" do
 
   it "should count records" do
     @results.row_count.should == 3
-    @results.should be_buffered
   end
 
-  it "should buffer records" do
-    @results.should_not be_buffered
-    @results.buffer!
-    @results.should be_buffered
-  end
-
-  it "should only buffer records once" do
-    @results.buffer!.should be_true
-    @results.buffer!.should be_false
+  it "should be able to run a second query" do
+    @conn.query "select * from Test2"
   end
 
   shared_examples_for "a read query" do
@@ -32,13 +24,13 @@ describe "a select query" do
   end
 
   context "without buffering" do
-    it_should_behave_like "a read query"
+    #it_should_behave_like "a read query"
 
-    after(:each) {@results.should_not be_buffered}
+    #after(:each) {@results.should_not be_buffered}
   end
 
   context "with buffering" do
-    before(:each) { @results.buffer! }
+    #before(:each) { @results.buffer! }
 
     it_should_behave_like "a read query"
   end

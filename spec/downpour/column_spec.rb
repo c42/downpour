@@ -26,14 +26,4 @@ describe "a drizzle result" do
   it "should have table name set on column" do
     @results.columns[0].table.should == "Test2"
   end
-
-  it "should not buffer after reading columns" do
-    @results.columns
-    @results.should_not be_buffered
-  end
-
-  it "should be able to read after buffering" do
-    @results.buffer!
-    @results.columns.size.should == 2
-  end
 end

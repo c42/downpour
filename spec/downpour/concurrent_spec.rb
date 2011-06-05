@@ -9,12 +9,6 @@ describe "a concurrent query" do
   end
 
   context "when running all" do
-    it "should buffer all queries" do
-      @status.run_all!
-      @query1.result.should be_buffered
-      @query2.result.should be_buffered
-    end
-
     it "should run all queries" do
       @status.run_all!
       @query1.result.next_row.should == ["foo"]
