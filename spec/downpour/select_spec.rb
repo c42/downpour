@@ -24,6 +24,7 @@ describe "a select query" do
   end
 
   context "without buffering" do
+    # TODO: This API has been removed. See commit 2067c0ef9493f4fe1e877eafea2a0c72e8135391 for more details
     #it_should_behave_like "a read query"
 
     #after(:each) {@results.should_not be_buffered}
