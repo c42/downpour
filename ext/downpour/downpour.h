@@ -19,6 +19,8 @@ void *downpour_from_ruby_object(VALUE value);
 VALUE downpour_to_ruby_object(void *ptr, VALUE klass, VALUE parent, FREE_METHOD free_method, SET_CONTEXT set_context);
 VALUE downpour_get_ruby_object(void *ptr);
 VALUE downpour_get_parent(VALUE self);
+void downpour_set_extra_pointer(VALUE self, void *extra_pointer, FREE_METHOD free_extra_pointer);
+void *downpour_get_extra_pointer(VALUE self);
 
 // All Constructors
 VALUE downpour_constructor(drizzle_st *self_ptr);
@@ -39,6 +41,7 @@ const char *drizzle_gem_read_string_with_default(VALUE string, const char *defau
 #define read_string(value, default_value) drizzle_gem_read_string_with_default(value, default_value)
 #define drizzle_alloc(type) ((type *) malloc(sizeof(type)))
 #define to_ruby_object(ptr, klass, parent, free_method, set_context) downpour_to_ruby_object(ptr, klass, parent, (FREE_METHOD) (free_method), (SET_CONTEXT) (set_context))
+#define set_extra_pointer(value, ptr, free_method) downpour_set_extra_pointer(value, ptr, (FREE_METHOD) free_method)
 
 // Property Macros -> define attr(foo, conversion) and settr_string to use them
 #define attr_string(foo) attr(foo, rb_str_new2)

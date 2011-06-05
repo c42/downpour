@@ -6,6 +6,8 @@ typedef struct DownpourWrapper {
   struct DownpourWrapper *parent;
   FREE_METHOD free_method;
   VALUE rb_object;
+  void *extra_pointer;
+  FREE_METHOD free_extra_pointer_method;
 } DownpourWrapper;
 
 static void downpour_mark(DownpourWrapper *wrapper)
@@ -16,6 +18,14 @@ static void downpour_mark(DownpourWrapper *wrapper)
   wrapper->reference_count++;
 }
 
+static void free_extra_pointer(DownpourWrapper *wrapper)
+{
+  if(wrapper->extra_pointer == NULL || wrapper->free_extra_pointer_method == NULL)
+    return;
+
+  wrapper->free_extra_pointer_method(wrapper->extra_pointer);
+}
+
 static void downpour_release(DownpourWrapper *wrapper)
 {
   if(wrapper == NULL)
@@ -24,6 +34,7 @@ static void downpour_release(DownpourWrapper *wrapper)
   wrapper->reference_count--;
 
   if(wrapper->reference_count == 0) {
+    free_extra_pointer(wrapper);
     wrapper->free_method(wrapper->ptr);
     downpour_release(wrapper->parent);
     free(wrapper);
@@ -37,6 +48,8 @@ static DownpourWrapper *downpour_wrap_pointer(void *ptr, DownpourWrapper *parent
   wrapper->parent = parent;
   wrapper->free_method = free_method;
   wrapper->reference_count = 0;
+  wrapper->extra_pointer = NULL;
+  wrapper->free_extra_pointer_method = NULL;
 
   downpour_mark(parent);
   downpour_mark(wrapper);
@@ -100,4 +113,18 @@ VALUE downpour_get_parent(VALUE self)
     return Qnil;
 
   return wrapper->parent->rb_object;
+}
+
+void downpour_set_extra_pointer(VALUE self, void *extra_pointer, FREE_METHOD free_extra_pointer_method)
+{
+  DownpourWrapper *wrapper = get_wrapper_from_object(self);
+  free_extra_pointer(wrapper);
+  wrapper->extra_pointer = extra_pointer;
+  wrapper->free_extra_pointer_method = free_extra_pointer_method;
+}
+
+void *downpour_get_extra_pointer(VALUE self)
+{
+  DownpourWrapper *wrapper = get_wrapper_from_object(self);
+  return wrapper->extra_pointer;
 }

@@ -26,4 +26,8 @@ describe "a drizzle result" do
   it "should have table name set on column" do
     @results.columns[0].table.should == "Test2"
   end
+
+  it "should return the same column each time" do
+    @results.columns[0].should == @results.columns[0]
+  end
 end
