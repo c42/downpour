@@ -13,6 +13,11 @@ describe "an unbuffered select query" do
     @results.next_row.should be_nil
   end
 
+  it "should be able to run a second query after all rows are read" do
+    4.times { @results.next_row }
+    @conn.query "select * from Test2"
+  end
+
   it "should be unbuffered" do
     @results.should_not be_buffered
   end
