@@ -22,8 +22,14 @@ static void free_extra_pointer(DownpourWrapper *wrapper)
 {
   if(wrapper->extra_pointer == NULL || wrapper->free_extra_pointer_method == NULL)
     return;
-
   wrapper->free_extra_pointer_method(wrapper->extra_pointer);
+}
+
+static void free_pointer(DownpourWrapper *wrapper)
+{
+  if(wrapper->ptr == NULL || wrapper->free_method == NULL)
+    return;
+  wrapper->free_method(wrapper->ptr);
 }
 
 static void downpour_release(DownpourWrapper *wrapper)
@@ -35,7 +41,7 @@ static void downpour_release(DownpourWrapper *wrapper)
 
   if(wrapper->reference_count == 0) {
     free_extra_pointer(wrapper);
-    wrapper->free_method(wrapper->ptr);
+    free_pointer(wrapper);
     downpour_release(wrapper->parent);
     free(wrapper);
   }

@@ -26,7 +26,8 @@ attr(decimals, UINT2NUM);
 
 VALUE downpour_column_constructor(drizzle_column_st *self_ptr, VALUE result)
 {
-  return to_ruby_object(self_ptr, DrizzleColumn, result, drizzle_column_free, NULL);
+  // Column object is owned by the result. Thus we let the result free it, and the free_method is null
+  return to_ruby_object(self_ptr, DrizzleColumn, result, NULL, NULL);
 }
 
 void init_drizzle_column()

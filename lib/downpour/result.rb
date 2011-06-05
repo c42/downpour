@@ -1,12 +1,5 @@
 module Downpour
   class Result
-    def columns
-      return @columns if @columns
-      @columns = []
-      while(column = next_column) do
-        @columns<<column
-      end
-      @columns
-    end
+    attr_reader :columns
   end
 end
