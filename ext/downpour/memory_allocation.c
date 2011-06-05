@@ -18,18 +18,21 @@ static void downpour_mark(DownpourWrapper *wrapper)
   wrapper->reference_count++;
 }
 
+static void exec_free_method(void *ptr, FREE_METHOD free_method)
+{
+  if(ptr == NULL || free_method == NULL)
+    return;
+  free_method(ptr);
+}
+
 static void free_extra_pointer(DownpourWrapper *wrapper)
 {
-  if(wrapper->extra_pointer == NULL || wrapper->free_extra_pointer_method == NULL)
-    return;
-  wrapper->free_extra_pointer_method(wrapper->extra_pointer);
+  exec_free_method(wrapper->extra_pointer, wrapper->free_extra_pointer_method);
 }
 
 static void free_pointer(DownpourWrapper *wrapper)
 {
-  if(wrapper->ptr == NULL || wrapper->free_method == NULL)
-    return;
-  wrapper->free_method(wrapper->ptr);
+  exec_free_method(wrapper->ptr, wrapper->free_method);
 }
 
 static void downpour_release(DownpourWrapper *wrapper)
