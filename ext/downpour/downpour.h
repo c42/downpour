@@ -8,7 +8,7 @@
 extern VALUE DownpourModule;
 extern VALUE DrizzleStatus;
 extern VALUE DrizzleConnection;
-extern VALUE DrizzleResult;
+extern VALUE DrizzleBufferedResult;
 extern VALUE DrizzleQuery;
 extern VALUE DrizzleColumn;
 

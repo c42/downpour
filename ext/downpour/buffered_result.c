@@ -1,7 +1,7 @@
 #include "downpour.h"
 
 #define SELF_TYPE drizzle_result_st
-#define RUBY_CLASS DrizzleResult
+#define RUBY_CLASS DrizzleBufferedResult
 
 #define attr(foo, conversion) static VALUE attr_##foo(VALUE self)\
 {\
@@ -109,17 +109,17 @@ attr_string(error);
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection)
 {
   buffer_if_needed(self_ptr);
-  VALUE ret = to_ruby_object(self_ptr, DrizzleResult, connection, drizzle_result_free, NULL);
+  VALUE ret = to_ruby_object(self_ptr, DrizzleBufferedResult, connection, drizzle_result_free, NULL);
   ResultExtraInfo *info = extra_info(self_ptr);
   set_extra_pointer(ret, info, free_extra_info);
   rb_iv_set(ret, "@columns", get_columns_in_array(self_ptr, ret, info));
   return ret;
 }
 
-void init_drizzle_result()
+void init_drizzle_buffered_result()
 {
-  DrizzleResult = drizzle_gem_create_class_with_private_constructor("Result", rb_cObject);
-  rb_define_method(DrizzleResult, "next_row", next_row, 0);
+  DrizzleBufferedResult = drizzle_gem_create_class_with_private_constructor("BufferedResult", rb_cObject);
+  rb_define_method(DrizzleBufferedResult, "next_row", next_row, 0);
   define_attr(row_count);
   define_attr(column_count);
   define_attr(insert_id);
