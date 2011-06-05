@@ -10,6 +10,7 @@ extern VALUE DrizzleStatus;
 extern VALUE DrizzleConnection;
 extern VALUE DrizzleResult;
 extern VALUE DrizzleBufferedResult;
+extern VALUE DrizzleUnBufferedResult;
 extern VALUE DrizzleQuery;
 extern VALUE DrizzleColumn;
 
@@ -26,7 +27,8 @@ void *downpour_get_extra_pointer(VALUE self);
 // All Constructors
 VALUE downpour_constructor(drizzle_st *self_ptr);
 VALUE downpour_connection_constructor(drizzle_con_st *self_ptr, VALUE status);
-VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection);
+VALUE downpour_buffered_result_constructor(drizzle_result_st *self_ptr, VALUE connection);
+VALUE downpour_unbuffered_result_constructor(drizzle_result_st *self_ptr, VALUE connection);
 VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE connection);
 VALUE downpour_column_constructor(drizzle_column_st *self_ptr, VALUE result);
 VALUE downpour_include_result_module(drizzle_result_st *self_ptr, VALUE self);

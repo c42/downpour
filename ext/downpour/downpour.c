@@ -5,6 +5,7 @@ VALUE DrizzleStatus;
 VALUE DrizzleConnection;
 VALUE DrizzleResult;
 VALUE DrizzleBufferedResult;
+VALUE DrizzleUnBufferedResult;
 VALUE DrizzleQuery;
 VALUE DrizzleColumn;
 
@@ -13,6 +14,7 @@ void init_drizzle_status();
 void init_drizzle_connection();
 void init_drizzle_result();
 void init_drizzle_buffered_result();
+void init_drizzle_unbuffered_result();
 void init_drizzle_query();
 void init_drizzle_column();
 
@@ -23,6 +25,7 @@ void Init_downpour()
   init_drizzle_connection();
   init_drizzle_result();
   init_drizzle_buffered_result();
+  init_drizzle_unbuffered_result();
   init_drizzle_query();
   init_drizzle_column();
 }

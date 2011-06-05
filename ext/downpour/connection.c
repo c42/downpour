@@ -16,7 +16,7 @@
   return newValue;\
 }
 
-static VALUE query(VALUE self, VALUE query)
+static drizzle_result_st *create_query(VALUE self, VALUE query)
 {
   read_self_ptr();
 
@@ -27,7 +27,17 @@ static VALUE query(VALUE self, VALUE query)
 
   CHECK_OK(retptr);
 
-  return downpour_result_constructor(result, self);
+  return result;
+}
+
+static VALUE query(VALUE self, VALUE query)
+{
+  return downpour_buffered_result_constructor(create_query(self, query), self);
+}
+
+static VALUE unbuffered_query(VALUE self, VALUE query)
+{
+  return downpour_unbuffered_result_constructor(create_query(self, query), self);
 }
 
 static VALUE connection_close(VALUE self)
@@ -63,6 +73,7 @@ void init_drizzle_connection()
 {
   DrizzleConnection = drizzle_gem_create_class_with_private_constructor("Connection", rb_cObject);
   rb_define_method(DrizzleConnection, "query", query, 1);
+  rb_define_method(DrizzleConnection, "unbuffered_query", unbuffered_query, 1);
   define_attr(options);
   define_attr(error);
   define_attr(errno);

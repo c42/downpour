@@ -10,6 +10,15 @@
   return conversion(drizzle_result_##foo(self_ptr));\
 }
 
+VALUE downpour_wrap_row(drizzle_result_st *self_ptr, drizzle_row_t row)
+{
+  // No more rows to read :-)
+  if(row == NULL)
+    return Qnil;
+
+  return drizzle_gem_to_string_array(row, drizzle_result_column_count(self_ptr));
+}
+
 bool downpour_is_buffered(drizzle_result_st *self_ptr)
 {
   return self_ptr->options & (DRIZZLE_RESULT_BUFFER_ROW);
@@ -31,7 +40,6 @@ static void buffer_column_if_needed(drizzle_result_st *self_ptr)
 
 static drizzle_column_st *next_column(drizzle_result_st *self_ptr)
 {
-  buffer_column_if_needed(self_ptr);
   return drizzle_column_next(self_ptr);
 }
 
@@ -41,6 +49,8 @@ typedef struct ResultExtraInfo {
 
 static ResultExtraInfo *extra_info(drizzle_result_st *self_ptr)
 {
+  buffer_column_if_needed(self_ptr);
+
   ResultExtraInfo *result = drizzle_alloc(ResultExtraInfo);
   int i, number_of_columns = drizzle_result_column_count(self_ptr);
   result->columns = malloc(sizeof(drizzle_column_st *) * (number_of_columns + 1));

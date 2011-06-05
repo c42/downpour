@@ -8,7 +8,7 @@ static VALUE create_results(VALUE self)
 
   drizzle_result_st *result = drizzle_query_result(self_ptr);
   VALUE connection = downpour_get_parent(self);
-  return downpour_result_constructor(result, connection);
+  return downpour_buffered_result_constructor(result, connection);
 }
 
 VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE connection)
