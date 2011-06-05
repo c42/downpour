@@ -8,6 +8,7 @@
 extern VALUE DownpourModule;
 extern VALUE DrizzleStatus;
 extern VALUE DrizzleConnection;
+extern VALUE DrizzleResult;
 extern VALUE DrizzleBufferedResult;
 extern VALUE DrizzleQuery;
 extern VALUE DrizzleColumn;
@@ -28,6 +29,7 @@ VALUE downpour_connection_constructor(drizzle_con_st *self_ptr, VALUE status);
 VALUE downpour_result_constructor(drizzle_result_st *self_ptr, VALUE connection);
 VALUE downpour_query_constructor(drizzle_query_st *self_ptr, VALUE connection);
 VALUE downpour_column_constructor(drizzle_column_st *self_ptr, VALUE result);
+VALUE downpour_include_result_module(drizzle_result_st *self_ptr, VALUE self);
 
 VALUE drizzle_gem_create_class_with_private_constructor(const char *name, VALUE super);
 void drizzle_gem_assert_value_is_ok(drizzle_return_t value);
