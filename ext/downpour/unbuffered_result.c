@@ -29,6 +29,15 @@ static VALUE next_row(VALUE self)
   return parsed;
 }
 
+// Improve this method
+static VALUE end_result(VALUE self)
+{
+  read_self_ptr();
+  while(do_drizzle_row_buffer(self_ptr) != NULL)
+    ; // Do Nothing
+  return Qnil;
+}
+
 VALUE downpour_unbuffered_result_constructor(drizzle_result_st *self_ptr, VALUE connection)
 {
   VALUE ret = to_ruby_object(self_ptr, DrizzleUnBufferedResult, connection, drizzle_result_free, NULL);
@@ -40,4 +49,5 @@ void init_drizzle_unbuffered_result()
   DrizzleUnBufferedResult = drizzle_gem_create_class_with_private_constructor("UnBufferedResult", rb_cObject);
   rb_include_module(DrizzleUnBufferedResult, DrizzleResult);
   rb_define_method(DrizzleUnBufferedResult, "next_row", next_row, 0);
+  rb_define_method(DrizzleUnBufferedResult, "close!", end_result, 0);
 }

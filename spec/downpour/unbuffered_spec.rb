@@ -18,6 +18,11 @@ describe "an unbuffered select query" do
     @conn.query "select * from Test2"
   end
 
+  it "should be able to run another query after closing the query" do
+    @results.close!
+    @conn.query "select * from Test2"
+  end
+
   it "should be unbuffered" do
     @results.should_not be_buffered
   end
