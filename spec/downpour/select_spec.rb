@@ -1,27 +1,37 @@
-describe "a select query" do
+describe "select queries" do
 
   before(:each) do
     @status = Downpour.create
     @conn = create_connection(@status)
-    @results = @conn.query "select * from Test1"
   end
 
-  it "should count records" do
-    @results.row_count.should == 3
+  shared_examples_for "a select query" do
+    it "should read all rows" do
+      results = @create_results.call "select * from Test1"
+      results.next_row.should == ["foo"]
+      results.next_row.should == ["bar"]
+      results.next_row.should == ["baz"]
+      results.next_row.should be_nil
+    end
   end
 
-  it "should be able to run a second query" do
-    @conn.query "select * from Test2"
+  context "an buffered select query" do
+    before(:each) { @create_results = lambda { |query| @conn.query query }}
+    it_should_behave_like "a select query"
   end
 
-  it "should read all rows" do
-    @results.next_row.should == ["foo"]
-    @results.next_row.should == ["bar"]
-    @results.next_row.should == ["baz"]
-    @results.next_row.should be_nil
+  context "an unbuffered select query" do
+    before(:each) { @create_results = lambda { |query| @conn.unbuffered_query query }}
+    it_should_behave_like "a select query"
   end
 
-  it "should be buffered" do
-    @results.should be_buffered
+  context "a concurrent select query" do
+    before(:each) do
+      @create_results = lambda do |query|
+        @status.add_query @conn, query
+        @status.run!.result
+      end
+    end
+    it_should_behave_like "a select query"
   end
 end
