@@ -11,3 +11,9 @@ create table Test2 (
   id int auto_increment primary key,
   name varchar(20)
 );
+
+drop table if exists TestNullField;
+create table TestNullField (
+  name varchar(20)
+);
+insert into TestNullField values (NULL);

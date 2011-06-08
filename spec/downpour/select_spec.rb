@@ -13,6 +13,11 @@ describe "select queries" do
       results.next_row.should == ["baz"]
       results.next_row.should be_nil
     end
+
+    it "should read nil when there is null in the db" do
+      results = @create_results.call "select * from TestNullField"
+      results.next_row.should == [nil]
+    end
   end
 
   context "an buffered select query" do
