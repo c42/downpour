@@ -4,6 +4,7 @@ end
 
 begin
   require "rake/extensiontask"
+  require "rake/gempackagetask"
   Rake::ExtensionTask.new("downpour", gemspec) do |ext|
     ext.lib_dir = File.join 'lib', 'downpour'
 
