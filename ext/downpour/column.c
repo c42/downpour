@@ -16,7 +16,7 @@ attr_string(orig_table);
 attr_string(name);
 attr_string(orig_name);
 // charset
-attr(column_size, UINT2NUM);
+attr(size, UINT2NUM);
 attr(max_size, INT2NUM);
 //column type
 //column_type_drizzle
@@ -40,7 +40,7 @@ void init_drizzle_column()
   define_attr(name);
   define_attr(orig_name);
   // charset
-  define_attr(column_size);
+  define_attr(size);
   define_attr(max_size);
   //column type
   //column_type_drizzle
