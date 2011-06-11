@@ -10,18 +10,32 @@
   return conversion(drizzle_result_##foo(self_ptr));\
 }
 
-static VALUE to_rb_string(char *str)
+typedef struct ResultExtraInfo {
+  drizzle_column_st **columns;
+} ResultExtraInfo;
+
+static VALUE to_rb_value(char *str, drizzle_column_st *column)
 {
-  return str == NULL ? Qnil : rb_str_new2(str);
+  if(str == NULL)
+    return Qnil;
+
+  switch(drizzle_column_type(column)) {
+
+    case DRIZZLE_COLUMN_TYPE_LONG:
+      return INT2NUM(strtol(str, NULL, 10));
+
+    default:
+      return rb_str_new2(str);
+  }
 }
 
-static VALUE to_results_array(char **array, long count)
+static VALUE to_results_array(char **array, long count, drizzle_column_st **columns)
 {
   VALUE ary = rb_ary_new2(count);
 
   long i;
   for(i = 0; i < count; i++)
-    rb_ary_push(ary, to_rb_string(array[i]));
+    rb_ary_push(ary, to_rb_value(array[i], columns[i]));
 
   return ary;
 }
@@ -32,7 +46,9 @@ VALUE downpour_wrap_row(VALUE self, drizzle_result_st *self_ptr, drizzle_row_t r
   if(row == NULL)
     return Qnil;
 
-  return to_results_array(row, drizzle_result_column_count(self_ptr));
+  ResultExtraInfo *extra_info = downpour_get_extra_pointer(self);
+
+  return to_results_array(row, drizzle_result_column_count(self_ptr), extra_info->columns);
 }
 
 bool downpour_is_buffered(drizzle_result_st *self_ptr)
@@ -58,10 +74,6 @@ static drizzle_column_st *next_column(drizzle_result_st *self_ptr)
 {
   return drizzle_column_next(self_ptr);
 }
-
-typedef struct ResultExtraInfo {
-  drizzle_column_st **columns;
-} ResultExtraInfo;
 
 static ResultExtraInfo *extra_info(drizzle_result_st *self_ptr)
 {
