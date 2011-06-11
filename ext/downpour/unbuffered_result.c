@@ -23,7 +23,7 @@ static VALUE next_row(VALUE self)
   read_self_ptr();
 
   drizzle_row_t result = do_drizzle_row_buffer(self_ptr);
-  VALUE parsed = downpour_wrap_row(self_ptr, result);
+  VALUE parsed = downpour_wrap_row(self, self_ptr, result);
   if(result)
     drizzle_row_free(self_ptr, result);
   return parsed;

@@ -24,7 +24,7 @@ static VALUE next_row(VALUE self)
   read_self_ptr();
 
   drizzle_row_t result = drizzle_row_next(self_ptr);
-  return downpour_wrap_row(self_ptr, result);
+  return downpour_wrap_row(self, self_ptr, result);
 }
 
 attr(row_count, UINT2NUM);

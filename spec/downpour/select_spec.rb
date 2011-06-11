@@ -15,14 +15,18 @@ describe "select queries" do
     end
 
     context "with different data types" do
-      before(:each) { @results = @create_results.call "select * from TestFieldTypes" }
+      before(:each) { @row = @create_results.call("select * from TestFieldTypes").next_row }
 
       it "should read nil when there is null in the db" do
-        @results.next_row[0].should be_nil
+        @row[0].should be_nil
       end
 
       it "should read a string" do
-        @results.next_row[1].should == "foo"
+        @row[1].should == "foo"
+      end
+
+      it "should read an integer" do
+        @row[2].should == 42
       end
     end
   end

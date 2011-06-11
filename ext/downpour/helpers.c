@@ -5,22 +5,6 @@ static VALUE do_not_use_this_constructor(VALUE self)
   rb_raise(rb_eNameError, "private method `new' called for %s:Class.", rb_class2name(CLASS_OF(self)));
 }
 
-static VALUE to_rb_string(char *str)
-{
-  return str == NULL ? Qnil : rb_str_new2(str);
-}
-
-VALUE drizzle_gem_to_string_array(char **array, long count)
-{
-  VALUE ary = rb_ary_new2(count);
-
-  long i;
-  for(i = 0; i < count; i++)
-    rb_ary_push(ary, to_rb_string(array[i]));
-
-  return ary;
-}
-
 VALUE drizzle_gem_create_class_with_private_constructor(const char *name, VALUE super)
 {
   VALUE ret = rb_define_class_under(DownpourModule, name, super);

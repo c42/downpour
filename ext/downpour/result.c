@@ -10,13 +10,29 @@
   return conversion(drizzle_result_##foo(self_ptr));\
 }
 
-VALUE downpour_wrap_row(drizzle_result_st *self_ptr, drizzle_row_t row)
+static VALUE to_rb_string(char *str)
+{
+  return str == NULL ? Qnil : rb_str_new2(str);
+}
+
+static VALUE to_results_array(char **array, long count)
+{
+  VALUE ary = rb_ary_new2(count);
+
+  long i;
+  for(i = 0; i < count; i++)
+    rb_ary_push(ary, to_rb_string(array[i]));
+
+  return ary;
+}
+
+VALUE downpour_wrap_row(VALUE self, drizzle_result_st *self_ptr, drizzle_row_t row)
 {
   // No more rows to read :-)
   if(row == NULL)
     return Qnil;
 
-  return drizzle_gem_to_string_array(row, drizzle_result_column_count(self_ptr));
+  return to_results_array(row, drizzle_result_column_count(self_ptr));
 }
 
 bool downpour_is_buffered(drizzle_result_st *self_ptr)
