@@ -14,9 +14,16 @@ describe "select queries" do
       results.next_row.should be_nil
     end
 
-    it "should read nil when there is null in the db" do
-      results = @create_results.call "select * from TestNullField"
-      results.next_row.should == [nil]
+    context "with different data types" do
+      before(:each) { @results = @create_results.call "select * from TestFieldTypes" }
+
+      it "should read nil when there is null in the db" do
+        @results.next_row[0].should be_nil
+      end
+
+      it "should read a string" do
+        @results.next_row[1].should == "foo"
+      end
     end
   end
 

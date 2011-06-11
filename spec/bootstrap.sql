@@ -12,8 +12,10 @@ create table Test2 (
   name varchar(20)
 );
 
-drop table if exists TestNullField;
-create table TestNullField (
-  name varchar(20)
+drop table if exists TestFieldTypes;
+create table TestFieldTypes (
+  null_field int,
+  string_field varchar(20),
+  int_field int
 );
-insert into TestNullField values (NULL);
+insert into TestFieldTypes values(NULL, 'foo', 42);
