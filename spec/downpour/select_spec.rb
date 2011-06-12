@@ -28,6 +28,10 @@ describe "select queries" do
       it "should read an integer" do
         @row[2].should == 42
       end
+
+      it "should read a floating point" do
+        @row[3].should == 8.5
+      end
     end
   end
 

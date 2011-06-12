@@ -16,6 +16,7 @@ drop table if exists TestFieldTypes;
 create table TestFieldTypes (
   null_field int,
   string_field varchar(20),
-  int_field int
+  int_field int,
+  double_field float
 );
-insert into TestFieldTypes values(NULL, 'foo', 42);
+insert into TestFieldTypes values(NULL, 'foo', 42, 8.5);

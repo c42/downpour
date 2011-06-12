@@ -19,13 +19,49 @@ static VALUE to_rb_value(char *str, drizzle_column_st *column)
   if(str == NULL)
     return Qnil;
 
-  switch(drizzle_column_type(column)) {
+#define not_implemented rb_str_new2(str)
 
+  switch(drizzle_column_type(column)) {
+    case DRIZZLE_COLUMN_TYPE_DECIMAL:
+      return not_implemented;
+
+    case DRIZZLE_COLUMN_TYPE_TINY:
+    case DRIZZLE_COLUMN_TYPE_SHORT:
     case DRIZZLE_COLUMN_TYPE_LONG:
       return INT2NUM(strtol(str, NULL, 10));
 
-    default:
+    case DRIZZLE_COLUMN_TYPE_FLOAT:
+    case DRIZZLE_COLUMN_TYPE_DOUBLE:
+      return rb_float_new(strtod(str, NULL));
+
+    case DRIZZLE_COLUMN_TYPE_NULL:
+    case DRIZZLE_COLUMN_TYPE_TIMESTAMP:
+    case DRIZZLE_COLUMN_TYPE_LONGLONG:
+    case DRIZZLE_COLUMN_TYPE_INT24:
+    case DRIZZLE_COLUMN_TYPE_DATE:
+    case DRIZZLE_COLUMN_TYPE_TIME:
+    case DRIZZLE_COLUMN_TYPE_DATETIME:
+    case DRIZZLE_COLUMN_TYPE_YEAR:
+    case DRIZZLE_COLUMN_TYPE_NEWDATE:
+      return not_implemented;
+
+    case DRIZZLE_COLUMN_TYPE_VARCHAR:
       return rb_str_new2(str);
+
+    case DRIZZLE_COLUMN_TYPE_BIT:
+    case DRIZZLE_COLUMN_TYPE_NEWDECIMAL:
+    case DRIZZLE_COLUMN_TYPE_ENUM:
+    case DRIZZLE_COLUMN_TYPE_SET:
+    case DRIZZLE_COLUMN_TYPE_TINY_BLOB:
+    case DRIZZLE_COLUMN_TYPE_MEDIUM_BLOB:
+    case DRIZZLE_COLUMN_TYPE_LONG_BLOB:
+    case DRIZZLE_COLUMN_TYPE_BLOB:
+    case DRIZZLE_COLUMN_TYPE_VAR_STRING:
+    case DRIZZLE_COLUMN_TYPE_STRING:
+    case DRIZZLE_COLUMN_TYPE_GEOMETRY:
+
+    default:
+      return not_implemented;
   }
 }
 
