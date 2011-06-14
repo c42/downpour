@@ -23,14 +23,21 @@ describe "select queries" do
 
       it "should read a string" do
         @row[1].should == "foo"
+        @row[1].should be_a(String)
       end
 
       it "should read an integer" do
         @row[2].should == 42
+        @row[2].should be_a(Fixnum)
       end
 
       it "should read a floating point" do
         @row[3].should == 8.5
+        @row[3].should be_a(Float)
+      end
+
+      it "should read a long long value" do
+        @row[4].should == 2147483648
       end
     end
   end

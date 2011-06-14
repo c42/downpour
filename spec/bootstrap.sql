@@ -17,6 +17,7 @@ create table TestFieldTypes (
   null_field int,
   string_field varchar(20),
   int_field int,
-  double_field float
+  double_field float,
+  ll_field bigint
 );
-insert into TestFieldTypes values(NULL, 'foo', 42, 8.5);
+insert into TestFieldTypes values(NULL, 'foo', 42, 8.5, 2147483648);

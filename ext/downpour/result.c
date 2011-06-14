@@ -28,7 +28,7 @@ static VALUE to_rb_value(char *str, drizzle_column_st *column)
     case DRIZZLE_COLUMN_TYPE_TINY:
     case DRIZZLE_COLUMN_TYPE_SHORT:
     case DRIZZLE_COLUMN_TYPE_LONG:
-      return INT2NUM(strtol(str, NULL, 10));
+      return rb_cstr2inum(str, 10);
 
     case DRIZZLE_COLUMN_TYPE_FLOAT:
     case DRIZZLE_COLUMN_TYPE_DOUBLE:
@@ -36,7 +36,11 @@ static VALUE to_rb_value(char *str, drizzle_column_st *column)
 
     case DRIZZLE_COLUMN_TYPE_NULL:
     case DRIZZLE_COLUMN_TYPE_TIMESTAMP:
+      return not_implemented;
+
     case DRIZZLE_COLUMN_TYPE_LONGLONG:
+      return rb_cstr2inum(str, 10);
+
     case DRIZZLE_COLUMN_TYPE_INT24:
     case DRIZZLE_COLUMN_TYPE_DATE:
     case DRIZZLE_COLUMN_TYPE_TIME:
